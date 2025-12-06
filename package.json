@@ -1,9 +1,9 @@
 {
   "version": "0.0.1",
-  "name": "herald",
+  "name": "herald-changelog",
   "module": "index.ts",
   "type": "module",
-  "private": true,
+  "private": false,
   "devDependencies": {
     "@types/bun": "latest"
   },
