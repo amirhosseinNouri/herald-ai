@@ -1,6 +1,6 @@
 {
-  "version": "0.0.10",
-  "name": "herald-changelog",
+  "version": "0.0.1",
+  "name": "herald-ai",
   "module": "index.ts",
   "type": "module",
   "private": false,
@@ -25,6 +25,6 @@
     "dist"
   ],
   "bin": {
-    "herald-changelog": "./dist/index.cjs"
+    "herald-ai": "./dist/index.cjs"
   }
 }
