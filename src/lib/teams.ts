@@ -46,4 +46,26 @@ const generateMessageCard = (
   return messageCard;
 };
 
-export { generateMessageCard };
+const sendMessageToChannel = async (messageCard: TeamsMessageCard) => {
+  if (!process.env.HERALD_TEAMS_WEBHOOK_URL) {
+    throw new Error('HERALD_TEAMS_WEBHOOK_URL not provided');
+  }
+
+  const response = await fetch(process.env.HERALD_TEAMS_WEBHOOK_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(messageCard),
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Teams webhook returned status ${response.status}: ${response.statusText}`,
+    );
+  }
+
+  console.log('✅ Release announcement sent successfully!');
+};
+
+export { generateMessageCard, sendMessageToChannel };

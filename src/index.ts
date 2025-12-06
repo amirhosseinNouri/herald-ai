@@ -1,7 +1,7 @@
 import { fetchVersionCommits, getProjectDetails } from '@/lib/gitlab';
 import { generateChangelog } from '@/lib/changelog';
 import { extractReleaseManager } from '@/lib/gitlab';
-import { generateMessageCard } from '@/lib/teams';
+import { generateMessageCard, sendMessageToChannel } from '@/lib/teams';
 import { extractPackageVersion } from '@/lib/package';
 import 'dotenv/config';
 async function announceRelease(): Promise<void> {
@@ -18,24 +18,7 @@ async function announceRelease(): Promise<void> {
       changelog,
       releaseManager,
     );
-    const response = await fetch(
-      process.env.HERALD_TEAMS_WEBHOOK_URL as string,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(messageCard),
-      },
-    );
-
-    if (!response.ok) {
-      throw new Error(
-        `Teams webhook returned status ${response.status}: ${response.statusText}`,
-      );
-    }
-
-    console.log('✅ Release announcement sent successfully!');
+    await sendMessageToChannel(messageCard);
   } catch (error) {
     console.error('❌ Failed to send release announcement:', error);
     process.exit(1);
