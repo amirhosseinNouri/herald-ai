@@ -23,9 +23,9 @@
     "dist"
   ],
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.cjs"
   },
   "bin": {
-    "herald-changelog": "./dist/index.js"
+    "herald-changelog": "./dist/index.cjs"
   }
 }
