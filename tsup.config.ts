@@ -8,6 +8,7 @@ export default defineConfig({
   minify: false,
   sourcemap: false,
   target: 'node18',
+  external: ['zod', 'ai', 'ollama-ai-provider-v2'],
   banner: {
     js: '#!/usr/bin/env node',
   },
