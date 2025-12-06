@@ -1,4 +1,4 @@
-import { fetchVersionCommits } from '@/lib/gitlab';
+import { fetchVersionCommits, getProjectDetails } from '@/lib/gitlab';
 import { generateChangelog } from '@/lib/changelog';
 import { extractReleaseManager } from '@/lib/gitlab';
 import { generateMessageCard } from '@/lib/teams';
@@ -11,19 +11,23 @@ async function announceRelease(): Promise<void> {
     const commits = await fetchVersionCommits(tag);
     const changelog = await generateChangelog(commits);
     const releaseManager = await extractReleaseManager();
+    const projectDetails = await getProjectDetails();
     const messageCard = generateMessageCard(
-      process.env.GITLAB_PROJECT_SLUG as string,
+      projectDetails.name,
       tag,
       changelog,
       releaseManager,
     );
-    const response = await fetch(process.env.TEAMS_WEBHOOK_URL as string, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      process.env.HERALD_TEAMS_WEBHOOK_URL as string,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(messageCard),
       },
-      body: JSON.stringify(messageCard),
-    });
+    );
 
     if (!response.ok) {
       throw new Error(

@@ -1,11 +1,16 @@
-import type { Commit, GitlabTag, GitlabUer } from '@/types/gitlab';
+import type {
+  Commit,
+  GitlabProject,
+  GitlabTag,
+  GitlabUer,
+} from '@/types/gitlab';
 
 const fetchVersionCommits = async (version: string) => {
   const tags = await fetch(
-    `${process.env.GITLAB_BASE_URL}/projects/${process.env.GITLAB_PROJECT_ID}/repository/tags`,
+    `${process.env.HERALD_GITLAB_BASE_URL}/projects/${process.env.HERALD_GITLAB_PROJECT_ID}/repository/tags`,
     {
       headers: {
-        Authorization: `Bearer ${process.env.GITLAB_TOKEN}`,
+        Authorization: `Bearer ${process.env.HERALD_GITLAB_TOKEN}`,
       },
     },
   );
@@ -25,10 +30,10 @@ const fetchVersionCommits = async (version: string) => {
 
   // Fetch all commits between the version and the previous version
   const commits = await fetch(
-    `${process.env.GITLAB_BASE_URL}/projects/${process.env.GITLAB_PROJECT_ID}/repository/compare?from=${previousTag.name}&to=${version}`,
+    `${process.env.HERALD_GITLAB_BASE_URL}/projects/${process.env.HERALD_GITLAB_PROJECT_ID}/repository/compare?from=${previousTag.name}&to=${version}`,
     {
       headers: {
-        Authorization: `Bearer ${process.env.GITLAB_TOKEN}`,
+        Authorization: `Bearer ${process.env.HERALD_GITLAB_TOKEN}`,
       },
     },
   );
@@ -43,9 +48,9 @@ const fetchVersionCommits = async (version: string) => {
 };
 
 const extractReleaseManager = async () => {
-  const response = await fetch(`${process.env.GITLAB_BASE_URL}/user`, {
+  const response = await fetch(`${process.env.HERALD_GITLAB_BASE_URL}/user`, {
     headers: {
-      Authorization: `Bearer ${process.env.GITLAB_TOKEN}`,
+      Authorization: `Bearer ${process.env.HERALD_GITLAB_TOKEN}`,
     },
   });
 
@@ -53,4 +58,18 @@ const extractReleaseManager = async () => {
   return user.name;
 };
 
-export { fetchVersionCommits, extractReleaseManager };
+const getProjectDetails = async () => {
+  const response = await fetch(
+    `${process.env.HERALD_GITLAB_BASE_URL}/projects/${process.env.HERALD_GITLAB_PROJECT_ID}`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.HERALD_HERALD_GITLAB_TOKEN}`,
+      },
+    },
+  );
+
+  const project = (await response.json()) as GitlabProject;
+  return project;
+};
+
+export { fetchVersionCommits, extractReleaseManager, getProjectDetails };
