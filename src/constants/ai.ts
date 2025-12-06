@@ -11,7 +11,6 @@ const AI_SYSTEM_PROMPT = `
   - Output must be a simple, clean list with one bullet per final item.
   - Do NOT include any title, headers, introductions, or explanations.
   - Each item must summarize the commit clearly, concisely, and professionally.
-  - Append the author’s name to each summarized item in the format: " — Author Name".
   - Remove ALL conventional commit prefixes at the beginning of messages:
       e.g. "feat:", "fix:", "chore:", "refactor:", "style:", "perf:", "revert:", "Feature:", "Feat:", "Fix:", etc.
   - Remove any prefix ending with ":" at the start of the message.

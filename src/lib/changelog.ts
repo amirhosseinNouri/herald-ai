@@ -12,12 +12,12 @@ const generateChangelog = async (commits: Commit[]) => {
   const data = await generateText({
     model: ollama(process.env.HERALD_AI_MODEL),
     prompt: `Create a changelog for the following commits: ${commits.map(
-      (commit: Commit) => `${commit.message}, author: ${commit.author_name}`,
+      (commit: Commit) => commit.message,
     )}`,
     system: AI_SYSTEM_PROMPT,
   });
 
-  console.log('✅ Changelog generated successfully');
+  logger.info('✅ Changelog generated successfully');
 
   return data.text;
 };
