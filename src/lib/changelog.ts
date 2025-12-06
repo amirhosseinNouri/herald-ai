@@ -17,7 +17,7 @@ const generateChangelog = async (commits: Commit[]) => {
     system: AI_SYSTEM_PROMPT,
   });
 
-  logger.info('✅ Changelog generated successfully');
+  console.log('✅ Changelog generated successfully');
 
   return data.text;
 };
