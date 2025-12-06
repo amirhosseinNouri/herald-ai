@@ -22,9 +22,6 @@
   "files": [
     "dist"
   ],
-  "exports": {
-    ".": "./dist/index.cjs"
-  },
   "bin": {
     "herald-changelog": "./dist/index.cjs"
   }
