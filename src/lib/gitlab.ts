@@ -44,6 +44,8 @@ const fetchVersionCommits = async (version: string) => {
 
   const data = (await commits.json()) as { commits: Commit[] };
 
+  console.log({ data });
+
   const commitsWithoutTags = data.commits.filter(
     (commit: Commit) => !commit.title.match(/^\d+\.\d+\.\d+(-\S+)?$/),
   );
