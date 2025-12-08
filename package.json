@@ -19,7 +19,7 @@
     "zod": "^4.1.8"
   },
   "scripts": {
-    "build": "tsup src/index.ts",
+    "build": "NODE_ENV=production tsup src/index.ts",
     "preversion": "bun run build"
   },
   "files": [
