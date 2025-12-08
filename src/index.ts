@@ -14,10 +14,10 @@ async function announceRelease(): Promise<void> {
   console.log(`Generating changelog for version ${tag}`);
 
   try {
+    const projectDetails = await getProjectDetails();
     const commits = await fetchVersionCommits(tag);
     const changelog = await generateChangelog(commits);
     const releaseManager = await extractReleaseManager();
-    const projectDetails = await getProjectDetails();
     const messageCard = generateMessageCard(
       projectDetails.name,
       tag,
