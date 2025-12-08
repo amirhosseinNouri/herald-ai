@@ -7,7 +7,7 @@ import type {
 
 const fetchVersionCommits = async (version: string) => {
   const tags = await fetch(
-    `${process.env.GITLAB_BASE_URL}/projects/${process.env.GITLAB_PROJECT_ID}/repository/tags&per_page=100`,
+    `${process.env.GITLAB_BASE_URL}/projects/${process.env.GITLAB_PROJECT_ID}/repository/tags?per_page=100`,
     {
       headers: {
         Authorization: `Bearer ${process.env.GITLAB_TOKEN}`,
