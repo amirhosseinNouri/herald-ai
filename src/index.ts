@@ -1,13 +1,13 @@
+import dotenv from 'dotenv';
+import path from 'path';
+dotenv.config({ path: path.join(process.cwd(), '.env') });
+
 import { fetchVersionCommits, getProjectDetails } from '@/lib/gitlab';
 import { generateChangelog } from '@/lib/changelog';
 import { extractReleaseManager } from '@/lib/gitlab';
 import { generateMessageCard, sendMessageToChannel } from '@/lib/teams';
 import { extractPackageVersion } from '@/lib/package';
-import dotenv from 'dotenv';
-import path from 'path';
 import { logger } from '@/lib/logger';
-
-dotenv.config({ path: path.join(process.cwd(), '.env') });
 
 async function announceRelease(): Promise<void> {
   const tag = extractPackageVersion();
