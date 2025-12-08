@@ -19,6 +19,7 @@ const AI_SYSTEM_PROMPT = `
   - Group similar commits into a single summarized item when appropriate.
   - Preserve the original intent of each commit while improving clarity.
   - Output only the final cleaned list—no labels, no explanations.
+  - Move breaking changes to the top of the list.
 </requirements>
 
 <input>
