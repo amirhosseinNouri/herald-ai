@@ -30,9 +30,11 @@ const fetchVersionCommits = async (version: string) => {
     throw new Error('Previous tag not found');
   }
 
+  console.log({ from: previousTag.name, to: version });
+
   // Fetch all commits between the version and the previous version
   const commits = await fetch(
-    `${process.env.GITLAB_BASE_URL}/projects/${process.env.GITLAB_PROJECT_ID}/repository/compare?from=${previousTag.name}&to=${version}`,
+    `${process.env.GITLAB_BASE_URL}/projects/${process.env.GITLAB_PROJECT_ID}/repository/compare?from=${previousTag.name}&to=${version}&per_page=1000`,
     {
       headers: {
         Authorization: `Bearer ${process.env.GITLAB_TOKEN}`,
