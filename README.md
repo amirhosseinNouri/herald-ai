@@ -20,16 +20,16 @@ Add the following variables to your `.env` file:
 
 ```env
 # GitLab personal access token with repository read access
-HERALD_GITLAB_TOKEN=your_personal_access_token
+GITLAB_TOKEN=your_personal_access_token
 
 # GitLab project ID (numeric)
-HERALD_GITLAB_PROJECT_ID=your_project_id
+GITLAB_PROJECT_ID=your_project_id
 
 # GitLab base URL for your instance (default: https://gitlab.com/api/v4)
-HERALD_GITLAB_BASE_URL=https://gitlab.com/api/v4
+GITLAB_BASE_URL=https://gitlab.com/api/v4
 
 # Microsoft Teams webhook connector URL
-HERALD_TEAMS_WEBHOOK_URL=https://your-teams-webhook-url
+TEAMS_WEBHOOK_URL=https://your-teams-webhook-url
 
 # Locally running Ollama model name (e.g., gemma3:1b, llama3, etc.)
 AI_MODEL=gemma3:1b
