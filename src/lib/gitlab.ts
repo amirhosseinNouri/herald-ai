@@ -16,6 +16,7 @@ const fetchVersionCommits = async (version: string) => {
   );
   console.log('✅ Fetched git tags from GitLab');
   const tagsData = (await tags.json()) as GitlabTag[];
+  console.log({ tagsData });
   const semanticTags = tagsData.filter((tag: any) =>
     tag.name.match(/^v\d+\.\d+\.\d+$/),
   );
