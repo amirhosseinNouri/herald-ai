@@ -1,6 +1,5 @@
 import type { Commit } from '@/types/gitlab';
 import { AI_SYSTEM_PROMPT } from '@/constants/ai';
-import { logger } from './logger';
 import { OpenAI } from 'openai';
 
 const generateChangelog = async (commits: Commit[]) => {
@@ -29,7 +28,7 @@ const generateChangelog = async (commits: Commit[]) => {
     ],
   });
 
-  logger.info('✅ Changelog generated successfully');
+  console.log('✅ Changelog generated successfully');
 
   if (!response.choices[0]?.message.content) {
     throw new Error('Failed to generate changelog');
