@@ -3,6 +3,7 @@ import {
   gitlabProjectSchema,
   gitlabTagsResponseSchema,
 } from '@/schema/gitlab';
+import { isError } from '@/types/error';
 import type { Commit, GitlabTag, GitlabUer } from '@/types/gitlab';
 import { log } from '@clack/prompts';
 
@@ -99,6 +100,10 @@ const getProjectDetails = async () => {
         },
       },
     );
+
+    if (isError(response)) {
+      throw new Error(response.message);
+    }
 
     const project = await response.json();
     return gitlabProjectSchema.parse(project);
