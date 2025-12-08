@@ -1,9 +1,11 @@
 import fs from 'fs';
 import path from 'path';
+import { log } from '@clack/prompts';
 
 const extractPackageVersion = (): string => {
   if (!fs.existsSync(path.resolve(process.cwd(), 'package.json'))) {
-    throw new Error('Package.json file not found');
+    log.error('Package.json file not found');
+    process.exit(1);
   }
 
   const packageJson = JSON.parse(
