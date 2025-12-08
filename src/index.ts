@@ -1,4 +1,5 @@
-import 'dotenv';
+import dotenv from 'dotenv';
+import path from 'path';
 import { intro, spinner } from '@clack/prompts';
 import color from 'picocolors';
 
@@ -7,6 +8,15 @@ import { generateChangelog } from '@/lib/changelog';
 import { extractReleaseManager } from '@/lib/gitlab';
 import { generateMessageCard, sendMessageToChannel } from '@/lib/teams';
 import { extractPackageVersion } from '@/lib/package';
+
+dotenv.config({
+  path: path.join(process.cwd(), '.env'),
+  debug: process.env.NODE_ENV === 'development',
+});
+dotenv.config({
+  path: path.join(process.cwd(), '.env.local'),
+  debug: process.env.NODE_ENV === 'development',
+});
 
 async function announceRelease(): Promise<void> {
   intro(color.bgBlueBright('Herald changelog generator'));
