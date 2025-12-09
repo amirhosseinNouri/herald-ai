@@ -15,6 +15,7 @@
     "dotenv": "^17.2.3",
     "ollama-ai-provider-v2": "^1.5.5",
     "tsup": "^8.5.1",
+    "winston": "^3.18.3",
     "zod": "^4.1.8"
   },
   "scripts": {

@@ -4,8 +4,11 @@ import { extractReleaseManager } from '@/lib/gitlab';
 import { generateMessageCard, sendMessageToChannel } from '@/lib/teams';
 import { extractPackageVersion } from '@/lib/package';
 import 'dotenv/config';
+import { logger } from '@/lib/logger';
 async function announceRelease(): Promise<void> {
   const tag = extractPackageVersion();
+
+  logger.info(`Generating changelog for version ${tag}`);
 
   try {
     const commits = await fetchVersionCommits(tag);

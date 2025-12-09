@@ -2,6 +2,7 @@ import { generateText } from 'ai';
 import { ollama } from 'ollama-ai-provider-v2';
 import type { Commit } from '@/types/gitlab';
 import { AI_SYSTEM_PROMPT } from '@/constants/ai';
+import { logger } from './logger';
 
 const generateChangelog = async (commits: Commit[]) => {
   if (!process.env.HERALD_AI_MODEL) {
@@ -15,6 +16,8 @@ const generateChangelog = async (commits: Commit[]) => {
     )}`,
     system: AI_SYSTEM_PROMPT,
   });
+
+  logger.info('✅ Changelog generated successfully');
 
   return data.text;
 };
