@@ -20,7 +20,7 @@ Add the following variables to your `.env` file:
 
 ```env
 # GitLab personal access token with repository read access
-HERALD_HERALD_GITLAB_TOKEN=your_personal_access_token
+HERALD_GITLAB_TOKEN=your_personal_access_token
 
 # GitLab project ID (numeric)
 HERALD_GITLAB_PROJECT_ID=your_project_id

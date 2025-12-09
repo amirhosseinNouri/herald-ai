@@ -1,6 +1,7 @@
 import { generateText } from 'ai';
 import { ollama } from 'ollama-ai-provider-v2';
 import type { Commit } from '@/types/gitlab';
+import { AI_SYSTEM_PROMPT } from '@/constants/ai';
 
 const generateChangelog = async (commits: Commit[]) => {
   if (!process.env.HERALD_AI_MODEL) {
@@ -12,7 +13,7 @@ const generateChangelog = async (commits: Commit[]) => {
     prompt: `Create a changelog for the following commits: ${commits.map(
       (commit: Commit) => commit.message,
     )}`,
-    system: `You are an AI agent responsible for generating a changelog from a list of commit messages. Your output must be a simple, clean list with no title, headers, or explanatory text. Each item should summarize the commit clearly and concisely. Improve unclear or low-quality commit messages while keeping the intended meaning. Avoid redundancy and group similar changes when appropriate. Maintain a neutral, professional tone.`,
+    system: AI_SYSTEM_PROMPT,
   });
 
   return data.text;
