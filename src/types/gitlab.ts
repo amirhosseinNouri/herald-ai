@@ -28,4 +28,8 @@ type GitlabUer = {
   name: string;
 };
 
-export type { Commit, GitlabTag, GitlabUer };
+type GitlabProject = {
+  name: string;
+};
+
+export type { Commit, GitlabTag, GitlabUer, GitlabProject };
