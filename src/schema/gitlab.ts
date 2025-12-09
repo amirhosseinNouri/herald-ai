@@ -20,7 +20,6 @@ const gitlabTagSchema = z.object({
   message: z.string(),
   target: z.string(),
   commit: gitlabCommitSchema,
-  release: z.null(),
   protected: z.boolean(),
 });
 
