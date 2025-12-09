@@ -16,7 +16,6 @@ const fetchVersionCommits = async (version: string) => {
   );
   console.log('✅ Fetched git tags from GitLab');
   const tagsData = (await tags.json()) as GitlabTag[];
-  console.log({ tagsData });
   const semanticTags = tagsData.filter((tag: any) =>
     tag.name.match(/^v\d+\.\d+\.\d+$/),
   );
@@ -45,8 +44,6 @@ const fetchVersionCommits = async (version: string) => {
   console.log('✅ Fetched changed commits from GitLab');
 
   const data = (await commits.json()) as { commits: Commit[] };
-
-  console.log({ data });
 
   const commitsWithoutTags = data.commits.filter(
     (commit: Commit) => !commit.title.match(/^\d+\.\d+\.\d+(-\S+)?$/),
@@ -78,9 +75,9 @@ const getProjectDetails = async () => {
     },
   );
 
-  console.log('✅ Fetched project details from GitLab');
-
   const project = (await response.json()) as GitlabProject;
+
+  console.log(`✅ Fetched project ${project.name} details from GitLab`);
   return project;
 };
 
