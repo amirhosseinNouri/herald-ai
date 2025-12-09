@@ -11,7 +11,7 @@ import { generateMessageCard, sendMessageToChannel } from '@/lib/teams';
 import { extractPackageVersion } from '@/lib/package';
 
 async function announceRelease(): Promise<void> {
-  intro(color.inverse('Herald changelog generator'));
+  intro(color.bgBlueBright('Herald changelog generator'));
 
   const loading = spinner();
 
