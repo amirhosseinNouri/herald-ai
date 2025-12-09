@@ -1,5 +1,5 @@
 {
-  "version": "1.9.2",
+  "version": "1.9.3-0",
   "name": "herald-ai",
   "module": "index.ts",
   "type": "module",
