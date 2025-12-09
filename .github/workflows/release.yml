@@ -1,0 +1,85 @@
+name: NPM Publish on Tag
+
+on:
+  push:
+    tags:
+      - '*'
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Run format and lint checks
+        run: bun run check
+
+      - name: Run tests
+        run: bun test
+
+      - name: Build
+        run: bun run build
+
+      - name: Publish to NPM
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          bun publish --access public
+
+      - name: Send Teams notification
+        if: always()
+        run: |
+          STATUS="${{ job.status }}"
+          TAG_NAME="${{ github.ref_name }}"
+          REPO_NAME="${{ github.repository }}"
+          
+          if [ "$STATUS" == "success" ]; then
+            COLOR="28a745"
+            TITLE="✅ NPM Publish Successful"
+          else
+            COLOR="dc3545"
+            TITLE="❌ NPM Publish Failed"
+          fi
+          
+          curl -H 'Content-Type: application/json' -d '{
+            "@type": "MessageCard",
+            "@context": "https://schema.org/extensions",
+            "summary": "NPM Publish '"$STATUS"'",
+            "themeColor": "'"$COLOR"'",
+            "title": "'"$TITLE"'",
+            "sections": [{
+              "facts": [
+                {
+                  "name": "Repository:",
+                  "value": "'"$REPO_NAME"'"
+                },
+                {
+                  "name": "Tag:",
+                  "value": "'"$TAG_NAME"'"
+                },
+                {
+                  "name": "Status:",
+                  "value": "'"$STATUS"'"
+                }
+              ]
+            }],
+            "potentialAction": [{
+              "@type": "OpenUri",
+              "name": "View Run",
+              "targets": [{
+                "os": "default",
+                "uri": "'"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"'"
+              }]
+            }]
+          }' ${{ secrets.TEAMS_WEBHOOK_URL }}
