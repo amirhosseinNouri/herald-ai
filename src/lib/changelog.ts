@@ -1,7 +1,7 @@
 import type { Commit } from '@/types/gitlab';
 import { AI_SYSTEM_PROMPT } from '@/constants/ai';
-import { OpenAI } from 'openai';
 import { log } from '@clack/prompts';
+import { OpenRouter } from '@openrouter/sdk';
 
 const generateChangelog = async (commits: Commit[]) => {
   if (!process.env.AI_MODEL) {
@@ -19,13 +19,11 @@ const generateChangelog = async (commits: Commit[]) => {
     process.exit(1);
   }
 
-  const openai = new OpenAI({
-    apiKey: process.env.AI_API_KEY,
-    baseURL: process.env.AI_BASE_URL,
-  });
-
   try {
-    const response = await openai.chat.completions.create({
+    const openRouter = new OpenRouter({
+      apiKey: process.env.AI_API_KEY,
+    });
+    const completion = await openRouter.chat.send({
       model: process.env.AI_MODEL,
       messages: [
         {
@@ -39,13 +37,14 @@ const generateChangelog = async (commits: Commit[]) => {
           content: AI_SYSTEM_PROMPT,
         },
       ],
+      stream: false,
     });
 
-    if (!response.choices[0]?.message.content) {
+    if (!completion.choices[0]?.message.content) {
       throw new Error('Failed to generate changelog');
     }
 
-    return response.choices[0].message.content;
+    return completion.choices[0].message.content as string;
   } catch (error) {
     log.error(`Failed to generate changelog: ${error}`);
     process.exit(1);

@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@clack/prompts": "^0.11.0",
+    "@openrouter/sdk": "^0.2.9",
     "dotenv": "^17.2.3",
-    "openai": "^6.10.0",
     "picocolors": "^1.1.1",
     "zod": "^4.1.8"
   },

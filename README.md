@@ -2,7 +2,7 @@
 
 Herald is a tool that automatically generates changelogs for your latest version (from `package.json`) using commit messages and AI. The generated changelog is posted to a Microsoft Teams channel using a webhook.
 
-Currently supports Openai and gemini models for AI-powered changelog generation.
+Currently supports OpenRouter for AI-powered changelog generation, which provides access to various AI models including OpenAI, Anthropic, and others.
 
 ## Installation
 
@@ -31,14 +31,10 @@ GITLAB_BASE_URL=https://gitlab.com/api/v4
 # Microsoft Teams webhook connector URL
 TEAMS_WEBHOOK_URL=https://your-teams-webhook-url
 
-# Openai model name
+# OpenRouter model name (e.g., openai/gpt-4o-mini, anthropic/claude-3-opus)
 AI_MODEL=openai/gpt-4o-mini
 
-# AI Base URL
-AI_BASE_URL=https://ai.liara.ir/api
-
-
-# AI API key
+# OpenRouter API key
 AI_API_KEY=<api-key-here>
 ```
 
@@ -72,6 +68,6 @@ Add Herald to your `package.json` scripts:
 ## Requirements
 
 - Node.js 18+ or Bun
-- Openai credential (you can use Liara or Arvancloud services)
+- OpenRouter API key (get one at https://openrouter.ai)
 - GitLab repository with semantic version tags (format: `v1.2.3`)
 - Microsoft Teams webhook URL
