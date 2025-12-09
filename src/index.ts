@@ -5,7 +5,7 @@ import color from 'picocolors';
 
 import { fetchVersionCommits, getProjectDetails } from '@/lib/gitlab';
 import { generateChangelog } from '@/lib/changelog';
-import { extractReleaseManager } from '@/lib/gitlab';
+import { getReleaseManager } from '@/lib/gitlab';
 import { generateMessageCard, sendMessageToChannel } from '@/lib/teams';
 import { extractPackageVersion } from '@/lib/package';
 
@@ -46,7 +46,7 @@ async function announceRelease(): Promise<void> {
 
     // Extract release manager
     s.start('Extracting release manager');
-    const releaseManager = await extractReleaseManager();
+    const releaseManager = await getReleaseManager();
     s.stop(`Release manager: ${releaseManager}`);
 
     // Generate teams message

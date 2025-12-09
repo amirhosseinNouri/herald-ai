@@ -2,6 +2,7 @@ import {
   gitlabCompareResponseSchema,
   gitlabProjectSchema,
   gitlabTagsResponseSchema,
+  gitlabUserSchema,
 } from '@/schema/gitlab';
 import { isError } from '@/types/error';
 import type { Commit, GitlabTag, GitlabUer } from '@/types/gitlab';
@@ -50,6 +51,18 @@ const getPreviousTag = async (version: string) => {
 const fetchVersionCommits = async (version: string) => {
   const { GITLAB_BASE_URL, GITLAB_PROJECT_ID, GITLAB_TOKEN } = process.env;
 
+  if (!GITLAB_BASE_URL) {
+    throw new Error('GITLAB_BASE_URL not provided');
+  }
+
+  if (!GITLAB_PROJECT_ID) {
+    throw new Error('GITLAB_PROJECT_ID not provided');
+  }
+
+  if (!GITLAB_TOKEN) {
+    throw new Error('GITLAB_TOKEN not provided');
+  }
+
   try {
     const previousTag = await getPreviousTag(version);
 
@@ -77,40 +90,62 @@ const fetchVersionCommits = async (version: string) => {
   }
 };
 
-const extractReleaseManager = async () => {
-  const response = await fetch(`${process.env.GITLAB_BASE_URL}/user`, {
+const getReleaseManager = async () => {
+  const { GITLAB_BASE_URL, GITLAB_TOKEN } = process.env;
+
+  if (!GITLAB_BASE_URL) {
+    throw new Error('GITLAB_BASE_URL not provided');
+  }
+
+  if (!GITLAB_TOKEN) {
+    throw new Error('GITLAB_TOKEN not provided');
+  }
+
+  const response = await fetch(`${GITLAB_BASE_URL}/user`, {
     headers: {
-      Authorization: `Bearer ${process.env.GITLAB_TOKEN}`,
+      Authorization: `Bearer ${GITLAB_TOKEN}`,
     },
   });
 
-  const user = (await response.json()) as GitlabUer;
+  if (isError(response)) {
+    throw new Error(response.message);
+  }
+
+  const data = await response.json();
+  const user = gitlabUserSchema.parse(data);
   return user.name;
 };
 
 const getProjectDetails = async () => {
-  const projectId = process.env.GITLAB_PROJECT_ID;
+  const { GITLAB_BASE_URL, GITLAB_PROJECT_ID, GITLAB_TOKEN } = process.env;
 
-  try {
-    const response = await fetch(
-      `${process.env.GITLAB_BASE_URL}/projects/${projectId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.GITLAB_TOKEN}`,
-        },
-      },
-    );
-
-    if (isError(response)) {
-      throw new Error(response.message);
-    }
-
-    const project = await response.json();
-    return gitlabProjectSchema.parse(project);
-  } catch (error) {
-    log.error(`Failed to get project ${projectId} details: ${error}`);
-    process.exit(1);
+  if (!GITLAB_PROJECT_ID) {
+    throw new Error('GITLAB_PROJECT_ID not provided');
   }
+
+  if (!GITLAB_BASE_URL) {
+    throw new Error('GITLAB_BASE_URL not provided');
+  }
+
+  if (!GITLAB_TOKEN) {
+    throw new Error('GITLAB_TOKEN not provided');
+  }
+
+  const response = await fetch(
+    `${GITLAB_BASE_URL}/projects/${GITLAB_PROJECT_ID}`,
+    {
+      headers: {
+        Authorization: `Bearer ${GITLAB_TOKEN}`,
+      },
+    },
+  );
+
+  if (isError(response)) {
+    throw new Error(response.message);
+  }
+
+  const project = await response.json();
+  return gitlabProjectSchema.parse(project);
 };
 
-export { fetchVersionCommits, extractReleaseManager, getProjectDetails };
+export { fetchVersionCommits, getReleaseManager, getProjectDetails };
