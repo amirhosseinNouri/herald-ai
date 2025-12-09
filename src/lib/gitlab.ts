@@ -12,6 +12,7 @@ const getPreviousTag = async (version: string) => {
   const { GITLAB_BASE_URL, GITLAB_PROJECT_ID, GITLAB_TOKEN } = process.env;
 
   try {
+    // TODO: It is better to recursively fetch tags until we find the previous tag
     const response = await fetch(
       `${GITLAB_BASE_URL}/projects/${GITLAB_PROJECT_ID}/repository/tags?per_page=${PAGE_SIZE}`,
       {
