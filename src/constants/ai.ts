@@ -14,7 +14,8 @@ const AI_SYSTEM_PROMPT = `
   - Improve unclear or low-quality commit messages while preserving the intended meaning.
   - Avoid redundancy and group similar changes when appropriate.
   - Maintain a neutral, professional tone.
-  - Remove conventional commit prefixes from the commit messages.
+  - Remove conventional commit prefixes from the commit messages. (anything with : suffix at the beginning of the commit message)
+  - Do not include merge commits
 </requirements>
 
 <input>
