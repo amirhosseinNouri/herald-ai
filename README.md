@@ -2,7 +2,7 @@
 
 Herald is a tool that automatically generates changelogs for your latest version (from `package.json`) using commit messages and AI. The generated changelog is posted to a Microsoft Teams channel using a webhook.
 
-Currently supports Ollama models for AI-powered changelog generation.
+Currently supports Openai and gemini models for AI-powered changelog generation.
 
 ## Installation
 
@@ -31,8 +31,15 @@ GITLAB_BASE_URL=https://gitlab.com/api/v4
 # Microsoft Teams webhook connector URL
 TEAMS_WEBHOOK_URL=https://your-teams-webhook-url
 
-# Locally running Ollama model name (e.g., gemma3:1b, llama3, etc.)
-AI_MODEL=gemma3:1b
+# Openai model name
+AI_MODEL=openai/gpt-4o-mini
+
+# AI Base URL
+AI_BASE_URL=https://ai.liara.ir/api
+
+
+# AI API key
+AI_API_KEY=<api-key-here>
 ```
 
 ### 2. Add to Scripts
@@ -49,11 +56,7 @@ Add Herald to your `package.json` scripts:
 
 ## Usage
 
-1. **Ensure Ollama is running**
-
-   Make sure your Ollama service is running locally. Visit [ollama.com](https://ollama.com/) for installation and setup instructions.
-
-2. **Run the script**
+1. **Run the script**
 
    ```bash
    pnpm run announce
@@ -63,12 +66,12 @@ Add Herald to your `package.json` scripts:
 
 1. Herald reads the version from your `package.json`
 2. Fetches commits between the current version and the previous version from GitLab
-3. Uses AI (via Ollama) to generate a clean, formatted changelog from commit messages
+3. Uses AI to generate a clean, formatted changelog from commit messages
 4. Posts the changelog as a formatted message card to your Microsoft Teams channel
 
 ## Requirements
 
 - Node.js 18+ or Bun
-- Ollama installed and running locally
+- Openai credential (you can use Liara or Arvancloud services)
 - GitLab repository with semantic version tags (format: `v1.2.3`)
 - Microsoft Teams webhook URL
