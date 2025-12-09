@@ -20,7 +20,10 @@
   },
   "scripts": {
     "build": "NODE_ENV=production tsup src/index.ts",
-    "preversion": "bun run build"
+    "preversion": "bun run build",
+    "test": "bun test",
+    "test:coverage": "bun test --coverage",
+    "test:watch": "bun test --watch"
   },
   "files": [
     "dist"

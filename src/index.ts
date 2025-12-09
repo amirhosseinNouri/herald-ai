@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import path from 'path';
-import { intro, spinner } from '@clack/prompts';
+import { intro, log, spinner } from '@clack/prompts';
 import color from 'picocolors';
 
 import { fetchVersionCommits, getProjectDetails } from '@/lib/gitlab';
@@ -23,45 +23,50 @@ async function announceRelease(): Promise<void> {
 
   const s = spinner();
 
-  // Package json version
-  s.start('Extracting package version');
-  const tag = extractPackageVersion();
-  s.stop(`Package version: ${tag}`);
+  try {
+    // Package json version
+    s.start('Extracting package version');
+    const tag = extractPackageVersion();
+    s.stop(`Package version: ${tag}`);
 
-  // Project details
-  s.start('Extracting project details');
-  const projectDetails = await getProjectDetails();
-  s.stop(`Project ${projectDetails.name} details extracted`);
+    // Project details
+    s.start('Extracting project details');
+    const projectDetails = await getProjectDetails();
+    s.stop(`Project ${projectDetails.name} details extracted`);
 
-  // Changed commits
-  s.start('Extracting changed commits');
-  const commits = await fetchVersionCommits(tag);
-  s.stop(`${commits.length} changed commits extracted`);
+    // Changed commits
+    s.start('Extracting changed commits');
+    const commits = await fetchVersionCommits(tag);
+    s.stop(`${commits.length} changed commits extracted`);
 
-  // Generate changelog
-  s.start('Generating changelog');
-  const changelog = await generateChangelog(commits);
-  s.stop('Changelog generated');
+    // Generate changelog
+    s.start('Generating changelog');
+    const changelog = await generateChangelog(commits);
+    s.stop('Changelog generated');
 
-  // Extract release manager
-  s.start('Extracting release manager');
-  const releaseManager = await extractReleaseManager();
-  s.stop(`Release manager: ${releaseManager}`);
+    // Extract release manager
+    s.start('Extracting release manager');
+    const releaseManager = await extractReleaseManager();
+    s.stop(`Release manager: ${releaseManager}`);
 
-  // Generate teams message
-  s.start('Generating teams message');
-  const messageCard = generateMessageCard(
-    projectDetails.name,
-    tag,
-    changelog,
-    releaseManager,
-  );
-  s.stop('Teams message generated');
+    // Generate teams message
+    s.start('Generating teams message');
+    const messageCard = generateMessageCard(
+      projectDetails.name,
+      tag,
+      changelog,
+      releaseManager,
+    );
+    s.stop('Teams message generated');
 
-  // Send teams message
-  s.start('Sending teams message');
-  await sendMessageToChannel(messageCard);
-  s.stop('Teams message sent successfully');
+    // Send teams message
+    s.start('Sending teams message');
+    await sendMessageToChannel(messageCard);
+    s.stop('Teams message sent successfully');
+  } catch (error) {
+    log.error(`Failed to announce release: ${error}`);
+    process.exit(1);
+  }
 }
 
 announceRelease();
