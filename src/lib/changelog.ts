@@ -3,8 +3,12 @@ import { ollama } from 'ollama-ai-provider-v2';
 import type { Commit } from '@/types/gitlab';
 
 const generateChangelog = async (commits: Commit[]) => {
+  if (!process.env.AI_MODEL) {
+    throw new Error('AI_MODEL not provided');
+  }
+
   const data = await generateText({
-    model: ollama('gemma3:1b'),
+    model: ollama(process.env.AI_MODEL),
     prompt: `Create a changelog for the following commits: ${commits.map(
       (commit: Commit) => commit.message,
     )}`,
