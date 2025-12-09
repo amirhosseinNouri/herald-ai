@@ -17,6 +17,7 @@ const generateChangelog = async (commits: Commit[]) => {
   try {
     const openRouter = new OpenRouter({
       apiKey: process.env.AI_API_KEY,
+      serverURL: process.env.AI_BASE_URL,
     });
     const completion = await openRouter.chat.send({
       model: process.env.AI_MODEL,
