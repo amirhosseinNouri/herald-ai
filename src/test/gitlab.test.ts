@@ -108,6 +108,7 @@ describe("lib => getReleaseManager", () => {
 		originalEnv = { ...process.env };
 
 		process.env.GITLAB_TOKEN = MOCK_TOKEN;
+		process.env.GITLAB_BASE_URL = MOCK_BASE_API;
 	});
 
 	afterEach(() => {
