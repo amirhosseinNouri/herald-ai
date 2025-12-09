@@ -7,7 +7,7 @@ const AI_SYSTEM_PROMPT = `
   Generate a changelog from a list of commit messages.
 </task>
 
-<output-format>
+<requirements>
   - Output must be a simple, clean list.
   - Do NOT include any title, headers, introductions, or explanations.
   - Each item must summarize the commit clearly and concisely.
@@ -15,6 +15,14 @@ const AI_SYSTEM_PROMPT = `
   - Avoid redundancy and group similar changes when appropriate.
   - Maintain a neutral, professional tone.
   - Remove conventional commit prefixes from the commit messages.
+</requirements>
+
+<input>
+  <!-- A list of raw commit messages will be provided here -->
+</input>
+
+<output-format>
+  <!-- A plain list of summarized changelog items -->
 </output-format>
 `;
 
