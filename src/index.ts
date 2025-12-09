@@ -3,6 +3,7 @@ import { generateChangelog } from '@/lib/changelog';
 import { extractReleaseManager } from '@/lib/gitlab';
 import { generateMessageCard } from '@/lib/teams';
 import { extractPackageVersion } from '@/lib/package';
+import 'dotenv/config';
 async function announceRelease(): Promise<void> {
   const tag = extractPackageVersion();
 

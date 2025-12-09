@@ -1,5 +1,5 @@
 {
-  "version": "0.0.6",
+  "version": "0.0.7",
   "name": "herald-changelog",
   "module": "index.ts",
   "type": "module",
@@ -12,8 +12,10 @@
   },
   "dependencies": {
     "ai": "^5.0.108",
+    "dotenv": "^17.2.3",
     "ollama-ai-provider-v2": "^1.5.5",
-    "tsup": "^8.5.1"
+    "tsup": "^8.5.1",
+    "zod": "^4.1.8"
   },
   "scripts": {
     "build": "tsup src/index.ts",
