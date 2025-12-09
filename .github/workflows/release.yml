@@ -1,4 +1,4 @@
-name: release
+name: NPM Publish on Tag
 
 on:
   push:
@@ -9,7 +9,6 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write  # Required for OIDC
       contents: read
       
     steps:
@@ -21,10 +20,8 @@ jobs:
         with:
           bun-version: latest
 
-      # Authenticate to npm using OIDC
-      - name: Authenticate with npm via OIDC
+      - name: Setup Node.js for NPM
         uses: actions/setup-node@v4
-        id: npm-oidc
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org
@@ -42,7 +39,9 @@ jobs:
         run: bun run build
 
       - name: Publish to NPM
-        run: npm publish --access public --provenance
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Send Teams notification
         if: always()
