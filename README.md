@@ -9,7 +9,7 @@ Currently supports Ollama models for AI-powered changelog generation.
 Install Herald as a dev dependency:
 
 ```bash
-pnpm install -D herald-changelog
+pnpm install -D herald-ai
 ```
 
 ## Configuration
@@ -42,7 +42,7 @@ Add Herald to your `package.json` scripts:
 ```json
 {
   "scripts": {
-    "announce": "herald-changelog"
+    "announce": "herald-ai"
   }
 }
 ```
