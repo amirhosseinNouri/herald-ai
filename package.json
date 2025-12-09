@@ -1,0 +1,27 @@
+{
+  "name": "herald",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "ai": "^5.0.108",
+    "ollama-ai-provider-v2": "^1.5.5",
+    "tsup": "^8.5.1"
+  },
+  "scripts": {
+    "build": "tsup index.ts",
+    "preversion": "bun run build"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": "./dist/index.js"
+  }
+}
