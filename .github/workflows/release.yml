@@ -4,12 +4,13 @@ on:
   push:
     tags:
       - '*'
-    branches:
-      - main
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     
     steps:
       - name: Checkout code
@@ -33,9 +34,7 @@ jobs:
         run: bun run build
 
       - name: Publish to NPM
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-          bun publish --access public
+        run: bun publish --access public
 
       - name: Send Teams notification
         if: always()
