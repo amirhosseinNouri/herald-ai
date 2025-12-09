@@ -11,11 +11,11 @@ import { extractPackageVersion } from '@/lib/package';
 
 dotenv.config({
   path: path.join(process.cwd(), '.env'),
-  debug: process.env.NODE_ENV === 'development',
+  debug: false,
 });
 dotenv.config({
   path: path.join(process.cwd(), '.env.local'),
-  debug: process.env.NODE_ENV === 'development',
+  debug: false,
 });
 
 async function announceRelease(): Promise<void> {
