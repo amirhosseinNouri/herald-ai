@@ -1,4 +1,5 @@
 import type { TeamsMessageCard } from '@/types/teams';
+import { logger } from './logger';
 
 const generateMessageCard = (
   projectName: string,
