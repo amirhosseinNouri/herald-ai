@@ -1,10 +1,10 @@
-import type { z } from 'zod';
+import type { z } from "zod";
 import type {
-  gitlabCommitSchema,
-  gitlabProjectSchema,
-  gitlabTagSchema,
-  gitlabUserSchema,
-} from '@/schema/gitlab';
+	gitlabCommitSchema,
+	gitlabProjectSchema,
+	gitlabTagSchema,
+	gitlabUserSchema,
+} from "@/schema/gitlab";
 
 type Commit = z.infer<typeof gitlabCommitSchema>;
 
