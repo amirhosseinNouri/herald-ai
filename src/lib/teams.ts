@@ -48,11 +48,11 @@ const generateMessageCard = (
 };
 
 const sendMessageToChannel = async (messageCard: TeamsMessageCard) => {
-  if (!process.env.HERALD_TEAMS_WEBHOOK_URL) {
-    throw new Error('HERALD_TEAMS_WEBHOOK_URL not provided');
+  if (!process.env.TEAMS_WEBHOOK_URL) {
+    throw new Error('TEAMS_WEBHOOK_URL not provided');
   }
 
-  const response = await fetch(process.env.HERALD_TEAMS_WEBHOOK_URL, {
+  const response = await fetch(process.env.TEAMS_WEBHOOK_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
