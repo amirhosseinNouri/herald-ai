@@ -13,41 +13,41 @@ import { extractPackageVersion } from '@/lib/package';
 async function announceRelease(): Promise<void> {
   intro(color.bgBlueBright('Herald changelog generator'));
 
-  const loading = spinner();
+  const s = spinner();
 
-  loading.start('Extracting package version...');
+  s.start('Extracting package version');
   const tag = extractPackageVersion();
-  loading.stop(`Package version: ${tag}`);
+  s.stop(`Package version: ${tag}`);
 
   try {
-    loading.start('Extracting project details');
+    s.start('Extracting project details');
     const projectDetails = await getProjectDetails();
-    loading.stop(`Project ${projectDetails.name} details extracted`);
+    s.stop(`Project ${projectDetails.name} details extracted`);
 
-    loading.start('Extracting changed commits...');
+    s.start('Extracting changed commits');
     const commits = await fetchVersionCommits(tag);
-    loading.stop(`${commits.length} changed commits extracted`);
+    s.stop(`${commits.length} changed commits extracted`);
 
-    loading.start('Generating changelog...');
+    s.start('Generating changelog');
     const changelog = await generateChangelog(commits);
-    loading.stop('Changelog generated');
+    s.stop('Changelog generated');
 
-    loading.start('Extracting release manager...');
+    s.start('Extracting release manager');
     const releaseManager = await extractReleaseManager();
-    loading.stop(`Release manager: ${releaseManager}`);
+    s.stop(`Release manager: ${releaseManager}`);
 
-    loading.start('Generating teams message...');
+    s.start('Generating teams message');
     const messageCard = generateMessageCard(
       projectDetails.name,
       tag,
       changelog,
       releaseManager,
     );
-    loading.stop('Teams message generated');
+    s.stop('Teams message generated');
 
-    loading.start('Sending teams message...');
+    s.start('Sending teams message');
     await sendMessageToChannel(messageCard);
-    loading.stop('Teams message sent successfully');
+    s.stop('Teams message sent successfully');
   } catch (error) {
     console.error('❌ Failed to send release announcement:', error);
     process.exit(1);
