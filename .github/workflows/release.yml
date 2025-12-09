@@ -11,39 +11,32 @@ jobs:
     permissions:
       contents: read
       id-token: write
-      
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
-      # Authenticate to npm using OIDC
-      - name: Authenticate with npm via OIDC
+      - name: Setup Node and Authenticate with npm
         uses: actions/setup-node@v4
-        id: npm-oidc
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org
           auth-type: oidc
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: npm ci
 
       - name: Run format and lint checks
-        run: bun run check
+        run: npm run check
 
       - name: Run tests
-        run: bun test
+        run: npm test
 
       - name: Build
-        run: bun run build
+        run: npm run build
 
       - name: Publish to NPM
-        run: bun publish --access public
+        run: npm publish --access public
 
       - name: Send Teams notification
         if: always()
