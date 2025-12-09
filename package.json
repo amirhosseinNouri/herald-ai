@@ -30,5 +30,6 @@
   ],
   "bin": {
     "herald-ai": "./dist/index.cjs"
-  }
+  },
+  "registry": "https://registry.npmjs.org"
 }
