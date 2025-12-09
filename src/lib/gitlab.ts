@@ -34,7 +34,7 @@ const fetchVersionCommits = async (version: string) => {
 
   // Fetch all commits between the version and the previous version
   const commits = await fetch(
-    `${process.env.GITLAB_BASE_URL}/projects/${process.env.GITLAB_PROJECT_ID}/repository/compare?from=${previousTag.name}&to=${version}&per_page=1000`,
+    `${process.env.GITLAB_BASE_URL}/projects/${process.env.GITLAB_PROJECT_ID}/repository/compare?from=${previousTag.name}&to=${version}&per_page=100`,
     {
       headers: {
         Authorization: `Bearer ${process.env.GITLAB_TOKEN}`,
