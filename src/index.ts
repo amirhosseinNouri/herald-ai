@@ -8,7 +8,7 @@ import { logger } from '@/lib/logger';
 async function announceRelease(): Promise<void> {
   const tag = extractPackageVersion();
 
-  logger.info(`Generating changelog for version ${tag}`);
+  console.log(`Generating changelog for version ${tag}`);
 
   try {
     const commits = await fetchVersionCommits(tag);

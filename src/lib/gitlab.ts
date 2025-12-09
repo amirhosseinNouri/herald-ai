@@ -15,7 +15,7 @@ const fetchVersionCommits = async (version: string) => {
       },
     },
   );
-  logger.info('✅ Fetched git tags from GitLab');
+  console.log('✅ Fetched git tags from GitLab');
   const tagsData = (await tags.json()) as GitlabTag[];
   const semanticTags = tagsData.filter((tag: any) =>
     tag.name.match(/^v\d+\.\d+\.\d+$/),
@@ -40,7 +40,7 @@ const fetchVersionCommits = async (version: string) => {
     },
   );
 
-  logger.info('✅ Fetched changed commits from GitLab');
+  console.log('✅ Fetched changed commits from GitLab');
 
   const data = (await commits.json()) as { commits: Commit[] };
 
@@ -58,7 +58,7 @@ const extractReleaseManager = async () => {
     },
   });
 
-  logger.info('✅ Fetched release manager from GitLab');
+  console.log('✅ Fetched release manager from GitLab');
 
   const user = (await response.json()) as GitlabUer;
   return user.name;
@@ -74,7 +74,7 @@ const getProjectDetails = async () => {
     },
   );
 
-  logger.info('✅ Fetched project details from GitLab');
+  console.log('✅ Fetched project details from GitLab');
 
   const project = (await response.json()) as GitlabProject;
   return project;
