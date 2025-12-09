@@ -1,5 +1,4 @@
 import type { TeamsMessageCard } from '@/types/teams';
-import { logger } from './logger';
 
 const generateMessageCard = (
   projectName: string,
@@ -66,7 +65,7 @@ const sendMessageToChannel = async (messageCard: TeamsMessageCard) => {
     );
   }
 
-  logger.info('✅ Release announcement sent successfully!');
+  console.log('✅ Release announcement sent successfully!');
 };
 
 export { generateMessageCard, sendMessageToChannel };
