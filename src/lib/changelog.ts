@@ -14,11 +14,6 @@ const generateChangelog = async (commits: Commit[]) => {
     process.exit(1);
   }
 
-  if (!process.env.AI_BASE_URL) {
-    log.error('AI_BASE_URL not provided');
-    process.exit(1);
-  }
-
   try {
     const openRouter = new OpenRouter({
       apiKey: process.env.AI_API_KEY,
