@@ -150,6 +150,14 @@ describe('lib => getReleaseManager', () => {
 
     await expect(getReleaseManager()).rejects.toThrow();
   });
+
+  it('should throw an error getting error from Gitlab', async () => {
+    const error = { message: 'Internal server error' };
+    const mockFetch = mock().mockResolvedValue(error);
+    (global as any).fetch = mockFetch;
+
+    await expect(() => getReleaseManager()).toThrowError(error.message);
+  });
 });
 
 describe('lib => fetchVersionCommits', () => {
@@ -173,6 +181,10 @@ describe('lib => fetchVersionCommits', () => {
 
   it('should throw an error if GITLAB_BASE_URL is not provided', () => {
     delete process.env.GITLAB_BASE_URL;
+
+    expect(() => fetchVersionCommits('1.0.0')).toThrowError(
+      'GITLAB_BASE_URL not provided',
+    );
   });
 
   it('should throw an error if GITLAB_PROJECT_ID is not provided', () => {
@@ -243,6 +255,16 @@ describe('lib => fetchVersionCommits', () => {
     expect(getPreviousTagSpy).toHaveBeenCalledWith('v1.0.0');
 
     getPreviousTagSpy.mockRestore();
+  });
+
+  it('should throw an error getting error from Gitlab', async () => {
+    const error = { message: 'Internal server error' };
+    const mockFetch = mock().mockResolvedValue(error);
+    (global as any).fetch = mockFetch;
+
+    await expect(() => fetchVersionCommits('v1.0.0')).toThrowError(
+      error.message,
+    );
   });
 });
 
@@ -356,5 +378,13 @@ describe('lib => getPreviousTag', async () => {
     (global as any).fetch = mockFetch;
 
     await expect(() => getPreviousTag('v1.1.1')).toThrowError();
+  });
+
+  it('should throw an error getting error from Gitlab', async () => {
+    const error = { message: 'Internal server error' };
+    const mockFetch = mock().mockResolvedValue(error);
+    (global as any).fetch = mockFetch;
+
+    await expect(() => getPreviousTag('v1.1.1')).toThrowError(error.message);
   });
 });
