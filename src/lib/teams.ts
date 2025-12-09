@@ -64,8 +64,6 @@ const sendMessageToChannel = async (messageCard: TeamsMessageCard) => {
       `Teams webhook returned status ${response.status}: ${response.statusText}`,
     );
   }
-
-  console.log('✅ Release announcement sent successfully!');
 };
 
 export { generateMessageCard, sendMessageToChannel };
