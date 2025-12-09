@@ -65,7 +65,7 @@ const sendMessageToChannel = async (messageCard: TeamsMessageCard) => {
     );
   }
 
-  console.log('✅ Release announcement sent successfully!');
+  logger.info('✅ Release announcement sent successfully!');
 };
 
 export { generateMessageCard, sendMessageToChannel };
