@@ -1,12 +1,8 @@
 import type { Commit, GitlabTag, GitlabUer } from '@/types/gitlab';
-import { loadConfig } from '@/lib/config';
 
 const fetchVersionCommits = async (version: string) => {
-  const config = await loadConfig();
-  const { gitlabBaseUrl } = config;
   const tags = await fetch(
-    // TODO: Extract project id to config
-    `${gitlabBaseUrl}/projects/${config.gitlabProjectId}/repository/tags`,
+    `${process.env.GITLAB_BASE_URL}/projects/${process.env.GITLAB_PROJECT_ID}/repository/tags`,
     {
       headers: {
         Authorization: `Bearer ${process.env.GITLAB_TOKEN}`,
@@ -29,7 +25,7 @@ const fetchVersionCommits = async (version: string) => {
 
   // Fetch all commits between the version and the previous version
   const commits = await fetch(
-    `${gitlabBaseUrl}/projects/${config.gitlabProjectId}/repository/compare?from=${previousTag.name}&to=${version}`,
+    `${process.env.GITLAB_BASE_URL}/projects/${process.env.GITLAB_PROJECT_ID}/repository/compare?from=${previousTag.name}&to=${version}`,
     {
       headers: {
         Authorization: `Bearer ${process.env.GITLAB_TOKEN}`,
@@ -47,9 +43,7 @@ const fetchVersionCommits = async (version: string) => {
 };
 
 const extractReleaseManager = async () => {
-  const config = await loadConfig();
-  const { gitlabBaseUrl } = config;
-  const response = await fetch(`${gitlabBaseUrl}/user`, {
+  const response = await fetch(`${process.env.GITLAB_BASE_URL}/user`, {
     headers: {
       Authorization: `Bearer ${process.env.GITLAB_TOKEN}`,
     },

@@ -1,4 +1,3 @@
-import { loadConfig } from '@/lib/config';
 import { fetchVersionCommits } from '@/lib/gitlab';
 import { generateChangelog } from '@/lib/changelog';
 import { extractReleaseManager } from '@/lib/gitlab';
@@ -6,19 +5,18 @@ import { generateMessageCard } from '@/lib/teams';
 import { extractPackageVersion } from '@/lib/package';
 async function announceRelease(): Promise<void> {
   const tag = extractPackageVersion();
-  const config = await loadConfig();
 
   try {
     const commits = await fetchVersionCommits(tag);
     const changelog = await generateChangelog(commits);
     const releaseManager = await extractReleaseManager();
     const messageCard = generateMessageCard(
-      config.gitlabProjectSlug,
+      process.env.GITLAB_PROJECT_SLUG as string,
       tag,
       changelog,
       releaseManager,
     );
-    const response = await fetch(config.teamsWebhookUrl, {
+    const response = await fetch(process.env.TEAMS_WEBHOOK_URL as string, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
