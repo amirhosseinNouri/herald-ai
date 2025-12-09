@@ -3,15 +3,14 @@ import type {
   gitlabCommitSchema,
   gitlabProjectSchema,
   gitlabTagSchema,
+  gitlabUserSchema,
 } from '@/schema/gitlab';
 
 type Commit = z.infer<typeof gitlabCommitSchema>;
 
 type GitlabTag = z.infer<typeof gitlabTagSchema>;
 
-type GitlabUer = {
-  name: string;
-};
+type GitlabUer = z.infer<typeof gitlabUserSchema>;
 
 type GitlabProject = z.infer<typeof gitlabProjectSchema>;
 

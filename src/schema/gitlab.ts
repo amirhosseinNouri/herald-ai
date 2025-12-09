@@ -24,6 +24,10 @@ const gitlabTagSchema = z.object({
   protected: z.boolean(),
 });
 
+const gitlabUserSchema = z.object({
+  name: z.string(),
+});
+
 const gitlabTagsResponseSchema = z.array(gitlabTagSchema);
 
 const gitlabCompareResponseSchema = z.object({
@@ -36,4 +40,5 @@ export {
   gitlabCommitSchema,
   gitlabTagsResponseSchema,
   gitlabCompareResponseSchema,
+  gitlabUserSchema,
 };
