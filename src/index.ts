@@ -8,7 +8,7 @@ import {
 	getProjectDetails,
 	getReleaseManager,
 } from "@/lib/gitlab";
-import { extractPackageVersion } from "@/lib/package";
+import { extractTag } from "@/lib/tag";
 import { generateMessageCard, sendMessageToChannel } from "@/lib/teams";
 
 dotenv.config({
@@ -26,10 +26,7 @@ async function announceRelease(): Promise<void> {
 	const s = spinner();
 
 	try {
-		// Package json version
-		s.start("Extracting package version");
-		const tag = extractPackageVersion();
-		s.stop(`Package version: ${tag}`);
+		const tag = extractTag(s);
 
 		// Project details
 		s.start("Extracting project details");

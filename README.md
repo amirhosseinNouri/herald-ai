@@ -59,15 +59,39 @@ Add Herald to your `package.json` scripts:
 1. **Run the script**
 
    ```bash
+   # Use version from package.json
+   pnpm exec herald-ai
+   # or with npx
+   npx herald-ai
+   # or with bunx
+   bunx herald-ai
+
+   # Or specify a specific tag
+   pnpm exec herald-ai --tag v1.2.3
+   # or
+   npx herald-ai --tag v1.2.3
+   # or
+   bunx herald-ai --tag 1.2.3
+   ```
+
+   Alternatively, you can use the npm script (requires extra `--`):
+
+   ```bash
    pnpm run announce
+   # or with tag
+   pnpm run announce -- --tag v1.2.3
    ```
 
 ## How It Works
 
-1. Herald reads the version from your `package.json`
+1. Herald reads the version from your `package.json` (or uses the provided `--tag` option)
 2. Fetches commits between the current version and the previous version from GitLab
 3. Uses AI to generate a clean, formatted changelog from commit messages
 4. Posts the changelog as a formatted message card to your Microsoft Teams channel
+
+## Command Line Options
+
+- `--tag <version>`: Specify a Git tag to announce (e.g., `--tag v1.2.3` or `--tag 1.2.3`). If not provided, Herald will use the version from `package.json`.
 
 ## Requirements
 

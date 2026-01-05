@@ -13,4 +13,9 @@ const extractPackageVersion = (): string => {
 	return `v${packageJson.version}`;
 };
 
-export { extractPackageVersion };
+const parseTag = (tag: string): string => {
+	// Ensure tag starts with 'v'
+	return tag.startsWith("v") ? tag : `v${tag}`;
+};
+
+export { extractPackageVersion, parseTag };
