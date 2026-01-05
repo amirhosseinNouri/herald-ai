@@ -10,7 +10,7 @@ import {
 } from "@/lib/gitlab";
 import { extractTag } from "@/lib/tag";
 import { generateMessageCard, sendMessageToChannel } from "@/lib/teams";
-import packageJson from '../package.json'
+import packageJson from "../package.json";
 
 dotenv.config({
 	path: path.join(process.cwd(), ".env"),
@@ -22,7 +22,9 @@ dotenv.config({
 });
 
 async function announceRelease(): Promise<void> {
-	intro(color.bgBlueBright(`Herald changelog generator v${packageJson.version}`));
+	intro(
+		color.bgBlueBright(`Herald changelog generator v${packageJson.version}`),
+	);
 
 	const s = spinner();
 
