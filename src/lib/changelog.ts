@@ -15,8 +15,8 @@ const generateChangelog = async (commits: Commit[]) => {
 	}
 
 	try {
-
-		const serverURL = process.env.AI_BASE_URL || "https://api.openrouter.ai/api/v1";
+		const serverURL =
+			process.env.AI_BASE_URL || "https://api.openrouter.ai/api/v1";
 
 		log.info(`Using AI base URL: ${serverURL}`);
 
