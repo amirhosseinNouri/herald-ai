@@ -1,4 +1,5 @@
-# Herald
+
+<img width="1472" height="704" alt="Gemini_Generated_Image_kca972kca972kca9" src="https://github.com/user-attachments/assets/a6a42f2e-01e1-4f5e-ba7c-c098aa4fec0a" />
 
 Herald is a tool that automatically generates changelogs for your latest version (from `package.json`) using commit messages and AI. The generated changelog is posted to a Microsoft Teams channel using a webhook.
 
