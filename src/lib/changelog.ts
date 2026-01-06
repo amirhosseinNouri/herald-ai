@@ -17,17 +17,10 @@ const generateChangelog = async (commits: Commit[]) => {
 	try {
 		const serverURL = process.env.AI_BASE_URL || "https://openrouter.ai/api/v1";
 
-		log.info(
-			`Using AI base URL: ${serverURL},  AI API Key: ${process.env.AI_API_KEY}`,
-		);
-		log.info(`Using AI model: ${process.env.AI_MODEL}`);
-		log.info(`Using AI API Key: ${process.env.AI_API_KEY}`);
-		log.info(`Using AI base URL: ${serverURL}`);
-		log.info(`Using AI API Key: ${process.env.AI_API_KEY}`);
-
 		const openRouter = new OpenRouter({
 			apiKey: process.env.AI_API_KEY,
 			serverURL,
+			xTitle: "Herald",
 		});
 		const completion = await openRouter.chat.send({
 			model: process.env.AI_MODEL,
