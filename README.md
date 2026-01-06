@@ -39,7 +39,7 @@ AI_API_KEY=<api-key-here>
 
 # AI base URL (optional, defaults to OpenRouter)
 # Can be used with any OpenAI-compatible platform (e.g., Liara)
-# AI_BASE_URL=https://api.openrouter.ai/api/v1
+# AI_BASE_URL=https://openrouter.ai/api/**v1**
 ```
 
 ### 2. Add to Scripts
