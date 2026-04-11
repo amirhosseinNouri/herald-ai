@@ -9,7 +9,7 @@
     {
       "type": "github-release",
       "token": "${GITHUB_TOKEN}",
-      "owner": "Amirhossein Nouri",
+      "owner": "amirhosseinNouri",
       "repo": "herald-ai"
     }
   ]
