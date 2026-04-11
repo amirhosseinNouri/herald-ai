@@ -7,6 +7,7 @@ const CONFIG_FILE_NAMES = [
 	"herald.config.ts",
 	"herald.config.js",
 	"herald.config.mjs",
+	"herald.config.json",
 ];
 
 function discoverConfigPath(customPath?: string): string {
@@ -33,6 +34,11 @@ function discoverConfigPath(customPath?: string): string {
 }
 
 async function importConfigModule(configPath: string): Promise<unknown> {
+	if (configPath.endsWith(".json")) {
+		const content = fs.readFileSync(configPath, "utf-8");
+		return JSON.parse(content);
+	}
+
 	const isBun =
 		typeof (globalThis as Record<string, unknown>).Bun !== "undefined";
 	const isTsFile = configPath.endsWith(".ts");

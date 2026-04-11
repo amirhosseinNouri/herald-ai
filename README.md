@@ -15,7 +15,7 @@ pnpm install -D herald-ai
 
 ## Configuration
 
-Create a `herald.config.ts` file in your project root:
+Create a `herald.config.ts` (or `.js`, `.mjs`, `.json`) file in your project root:
 
 ```ts
 import { defineConfig } from "herald-ai";
@@ -29,6 +29,22 @@ export default defineConfig({
     { type: "teams", webhookUrl: process.env.TEAMS_WEBHOOK_URL! },
   ],
 });
+```
+
+### JSON Config
+
+You can also use a `herald.config.json` file:
+
+```json
+{
+  "ai": {
+    "model": "openai/gpt-4o-mini",
+    "apiKey": "your-api-key"
+  },
+  "providers": [
+    { "type": "teams", "webhookUrl": "https://your-webhook-url" }
+  ]
+}
 ```
 
 ### Full Config Example
@@ -128,7 +144,7 @@ herald-ai --config ./config/herald.config.ts
 
 ## How It Works
 
-1. Herald loads your `herald.config.ts` configuration
+1. Herald loads your configuration (`herald.config.ts`, `.js`, `.mjs`, or `.json`)
 2. Fetches all semver tags from your local git repository
 3. You select a tag (interactively, via `--from`, or auto-selected in CI environments)
 4. Gets all commits between the selected tag and HEAD
@@ -139,7 +155,7 @@ herald-ai --config ./config/herald.config.ts
 
 | Flag | Description |
 |------|-------------|
-| `--config <path>` | Path to config file (default: auto-discover `herald.config.ts`) |
+| `--config <path>` | Path to config file (default: auto-discover `herald.config.{ts,js,mjs,json}`) |
 | `--from <tag>` | Specify a tag to diff against HEAD |
 | `--debug` | Generate changelog and print it without sending announcements |
 
