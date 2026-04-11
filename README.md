@@ -1,9 +1,9 @@
 
 <img width="1472" height="704" alt="Gemini_Generated_Image_kca972kca972kca9" src="https://github.com/user-attachments/assets/a6a42f2e-01e1-4f5e-ba7c-c098aa4fec0a" />
 
-Herald is a tool that automatically generates changelogs for your latest version (from `package.json`) using commit messages and AI. The generated changelog is posted to a Microsoft Teams channel using a webhook.
+Herald is a CLI tool that generates AI-powered changelogs from your git commit history and announces releases to multiple platforms. It diffs commits between HEAD and a selected tag, sends them to an LLM, and posts the result to your configured providers.
 
-Supports any OpenAI-compatible AI platform (defaults to OpenRouter, but can be configured to use other platforms like Liara via the `AI_BASE_URL` environment variable).
+Supports any OpenAI-compatible AI platform (defaults to OpenRouter).
 
 ## Installation
 
@@ -15,88 +15,147 @@ pnpm install -D herald-ai
 
 ## Configuration
 
-### 1. Environment Variables
+Create a `herald.config.ts` file in your project root:
 
-Add the following variables to your `.env` file:
+```ts
+import { defineConfig } from "herald-ai";
 
-```env
-# GitLab personal access token with repository read access
-GITLAB_TOKEN=your_personal_access_token
-
-# GitLab project ID (numeric)
-GITLAB_PROJECT_ID=your_project_id
-
-# GitLab base URL for your instance (default: https://gitlab.com/api/v4)
-GITLAB_BASE_URL=https://gitlab.com/api/v4
-
-# Microsoft Teams webhook connector URL
-TEAMS_WEBHOOK_URL=https://your-teams-webhook-url
-
-# OpenRouter model name (e.g., openai/gpt-4o-mini, anthropic/claude-3-opus)
-AI_MODEL=openai/gpt-4o-mini
-
-# OpenRouter API key
-AI_API_KEY=<api-key-here>
-
-# AI base URL (optional, defaults to OpenRouter)
-# Can be used with any OpenAI-compatible platform (e.g., Liara)
-# AI_BASE_URL=https://openrouter.ai/api/**v1**
+export default defineConfig({
+  ai: {
+    model: "openai/gpt-4o-mini",
+    apiKey: process.env.AI_API_KEY!,
+  },
+  providers: [
+    { type: "teams", webhookUrl: process.env.TEAMS_WEBHOOK_URL! },
+  ],
+});
 ```
 
-### 2. Add to Scripts
+### Full Config Example
 
-Add Herald to your `package.json` scripts:
+```ts
+import { defineConfig } from "herald-ai";
 
-```json
-{
-  "scripts": {
-    "announce": "herald-ai"
-  }
-}
+export default defineConfig({
+  ai: {
+    model: "openai/gpt-4o-mini",
+    apiKey: process.env.AI_API_KEY!,
+    baseUrl: "https://openrouter.ai/api/v1", // optional, defaults to OpenRouter
+  },
+  providers: [
+    // Microsoft Teams
+    {
+      type: "teams",
+      webhookUrl: process.env.TEAMS_WEBHOOK_URL!,
+    },
+    // GitLab Release Page
+    {
+      type: "gitlab-release",
+      baseUrl: "https://gitlab.example.com/api/v4",
+      token: process.env.GITLAB_TOKEN!,
+      projectId: "5755",
+    },
+    // Telegram
+    {
+      type: "telegram",
+      botToken: process.env.TELEGRAM_BOT_TOKEN!,
+      chatId: process.env.TELEGRAM_CHAT_ID!,
+    },
+    // Element (Matrix)
+    {
+      type: "element",
+      homeserverUrl: "https://matrix.example.com",
+      accessToken: process.env.ELEMENT_ACCESS_TOKEN!,
+      roomId: "!roomid:example.com",
+    },
+  ],
+  // Optional: custom AI prompt template for changelog generation
+  template: `Generate a changelog from the following commits. Output a clean bullet list.`,
+  // Optional: override project name (defaults to package.json name)
+  projectName: "My App",
+  // Optional: override release manager (defaults to git config user.name)
+  releaseManager: "Jane Doe",
+  // Optional: debug mode - only prints changelog, no announcements
+  debug: false,
+});
+```
+
+### Debug-Only Config
+
+To only generate and preview the changelog without sending announcements:
+
+```ts
+import { defineConfig } from "herald-ai";
+
+export default defineConfig({
+  ai: {
+    model: "openai/gpt-4o-mini",
+    apiKey: process.env.AI_API_KEY!,
+  },
+  providers: [
+    { type: "teams", webhookUrl: "https://placeholder" },
+  ],
+  debug: true,
+});
 ```
 
 ## Usage
 
-1. **Run the script**
+```bash
+# Interactive mode: select a tag from a list
+herald-ai
 
-   ```bash
-   # Use version from package.json
-   pnpm exec herald-ai
-   # or with npx
-   npx herald-ai
-   # or with bunx
-   bunx herald-ai
+# Specify a tag directly
+herald-ai --from v1.2.0
 
-   # Or specify a specific tag
-   pnpm exec herald-ai --tag v1.2.3
-   # or
-   npx herald-ai --tag v1.2.3
-   # or
-   bunx herald-ai --tag 1.2.3
-   ```
+# Debug mode: generate changelog without sending announcements
+herald-ai --debug
 
-   Alternatively, you can use the npm script (requires extra `--`):
+# Custom config path
+herald-ai --config ./config/herald.config.ts
+```
 
-   ```bash
-   pnpm run announce
-   # or with tag
-   pnpm run announce -- --tag v1.2.3
-   ```
+### Add to Scripts
+
+```json
+{
+  "scripts": {
+    "announce": "herald-ai",
+    "changelog": "herald-ai --debug"
+  }
+}
+```
 
 ## How It Works
 
-1. Herald reads the version from your `package.json` (or uses the provided `--tag` option)
-2. Fetches commits between the current version and the previous version from GitLab
-3. Uses AI to generate a clean, formatted changelog from commit messages
-4. Posts the changelog as a formatted message card to your Microsoft Teams channel
+1. Herald loads your `herald.config.ts` configuration
+2. Fetches all semver tags from your local git repository
+3. You select a tag (interactively, via `--from`, or auto-selected in CI environments)
+4. Gets all commits between the selected tag and HEAD
+5. Sends commits to the configured AI model to generate a changelog
+6. Posts the changelog to all configured providers (or prints it in debug mode)
 
 ## Command Line Options
 
-- `--tag <version>`: Specify a Git tag to announce (e.g., `--tag v1.2.3` or `--tag 1.2.3`). If not provided, Herald will use the version from `package.json`.
+| Flag | Description |
+|------|-------------|
+| `--config <path>` | Path to config file (default: auto-discover `herald.config.ts`) |
+| `--from <tag>` | Specify a tag to diff against HEAD |
+| `--debug` | Generate changelog and print it without sending announcements |
+
+> **Note:** Herald automatically detects CI environments (GitHub Actions, GitLab CI) and runs in non-interactive mode, auto-selecting the latest semver tag.
+
+## Providers
+
+| Provider | Description | Required Config |
+|----------|-------------|-----------------|
+| `teams` | Microsoft Teams webhook | `webhookUrl` |
+| `gitlab-release` | GitLab Release page | `baseUrl`, `token`, `projectId` |
+| `telegram` | Telegram bot message | `botToken`, `chatId` |
+| `element` | Element/Matrix room message | `homeserverUrl`, `accessToken`, `roomId` |
 
 ## Requirements
 
 - Node.js 18+ or Bun
-- AI API key (OpenRouter API key by default, or compatible with any OpenAI-compatible platform)
-- GitLab repository with semantic version tags (format: `v1.2.3`)
-- Microsoft Teams webhook URL
+- AI API key (OpenRouter by default, or any OpenAI-compatible platform)
+- Git repository with semver tags (e.g., `v1.2.3`)

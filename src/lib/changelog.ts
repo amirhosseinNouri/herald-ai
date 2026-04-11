@@ -1,53 +1,73 @@
-import { log } from "@clack/prompts";
-import { OpenRouter } from "@openrouter/sdk";
 import { AI_SYSTEM_PROMPT } from "@/constants/ai";
-import type { Commit } from "@/types/gitlab";
+import { getCached, setCached } from "@/lib/cache";
+import type { LocalCommit } from "@/types/git";
 
-const generateChangelog = async (commits: Commit[]) => {
-	if (!process.env.AI_MODEL) {
-		log.error("AI_MODEL not provided");
-		process.exit(1);
+interface AiConfig {
+	model: string;
+	apiKey: string;
+	baseUrl?: string;
+}
+
+const generateChangelog = async (
+	commits: LocalCommit[],
+	aiConfig: AiConfig,
+	template?: string,
+	cache?: boolean,
+) => {
+	const commitMessages = commits.map((commit) => commit.message);
+
+	if (cache) {
+		const cached = getCached(commitMessages);
+		if (cached) {
+			return cached;
+		}
 	}
 
-	if (!process.env.AI_API_KEY) {
-		log.error("AI_API_KEY not provided");
-		process.exit(1);
-	}
+	const baseUrl = aiConfig.baseUrl || "https://openrouter.ai/api/v1";
 
-	try {
-		const serverURL = process.env.AI_BASE_URL || "https://openrouter.ai/api/v1";
+	const commitList = commitMessages.map((m) => `- ${m}`).join("\n");
 
-		const openRouter = new OpenRouter({
-			apiKey: process.env.AI_API_KEY,
-			serverURL,
-			xTitle: "Herald",
-		});
-		const completion = await openRouter.chat.send({
-			model: process.env.AI_MODEL,
+	const response = await fetch(`${baseUrl}/chat/completions`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${aiConfig.apiKey}`,
+			"X-Title": "Herald",
+		},
+		body: JSON.stringify({
+			model: aiConfig.model,
 			messages: [
 				{
-					role: "user",
-					content: `Create a changelog for the following commits: ${commits.map(
-						(commit: Commit) => commit.message,
-					)}`,
+					role: "system",
+					content: template ?? AI_SYSTEM_PROMPT,
 				},
 				{
-					role: "system",
-					content: AI_SYSTEM_PROMPT,
+					role: "user",
+					content: `Create a changelog for the following commits:\n${commitList}`,
 				},
 			],
-			stream: false,
-		});
+		}),
+	});
 
-		if (!completion.choices[0]?.message.content) {
-			throw new Error("Failed to generate changelog");
-		}
-
-		return completion.choices[0].message.content as string;
-	} catch (error) {
-		log.error(`Failed to generate changelog: ${error}`);
-		process.exit(1);
+	if (!response.ok) {
+		const body = await response.text();
+		throw new Error(`AI API error (${response.status}): ${body}`);
 	}
+
+	const data = await response.json();
+	const content = data.choices?.[0]?.message?.content;
+
+	if (!content) {
+		throw new Error(
+			`AI returned no content: ${JSON.stringify(data).slice(0, 500)}`,
+		);
+	}
+
+	if (cache) {
+		setCached(commitMessages, content as string);
+	}
+
+	return content as string;
 };
 
 export { generateChangelog };
