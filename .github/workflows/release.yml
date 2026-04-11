@@ -51,4 +51,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPEN_ROUTER_API_KEY: ${{ secrets.OPEN_ROUTER_API_KEY }}
-          OPEN_ROUTER_AI_MODEL: ${{ vars.OPEN_ROUTER_AI_MODEL }}
+          OPEN_ROUTER_AI_MODEL: ${{ secrets.OPEN_ROUTER_AI_MODEL }}
