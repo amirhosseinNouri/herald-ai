@@ -42,9 +42,7 @@ jobs:
         run: bun run build
 
       - name: Publish to NPM
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public --provenance
 
       - name: Announce release with Herald
         run: node dist/index.cjs
