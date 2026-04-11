@@ -49,7 +49,6 @@ jobs:
       - name: Announce release with Herald
         run: node dist/index.cjs
         env:
-          HERALD_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          HERALD_AI_API_KEY: ${{ secrets.AI_API_KEY }}
-          HERALD_AI_MODEL: ${{ vars.HERALD_AI_MODEL }}
-          HERALD_REPO_NAME: ${{ github.event.repository.name }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPEN_ROUTER_API_KEY: ${{ secrets.OPEN_ROUTER_API_KEY }}
+          OPEN_ROUTER_AI_MODEL: ${{ vars.OPEN_ROUTER_AI_MODEL }}
