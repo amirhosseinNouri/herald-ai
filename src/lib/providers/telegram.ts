@@ -19,13 +19,17 @@ class TelegramProvider implements AnnouncementProvider {
 		this.chatId = config.chatId;
 	}
 
+	private escapeMarkdown(text: string): string {
+		return text.replace(/([*_`\[])/g, "\\$1");
+	}
+
 	async announce(payload: AnnouncementPayload): Promise<void> {
 		const text = [
-			`*${payload.projectName} ${payload.tag} Released*`,
+			`*${this.escapeMarkdown(payload.projectName)} ${this.escapeMarkdown(payload.tag)} Released*`,
 			"",
-			`*Release Manager:* ${payload.releaseManager}`,
+			`*Release Manager:* ${this.escapeMarkdown(payload.releaseManager)}`,
 			"",
-			payload.changelog,
+			this.escapeMarkdown(payload.changelog),
 		].join("\n");
 
 		const url = `https://api.telegram.org/bot${this.botToken}/sendMessage`;
