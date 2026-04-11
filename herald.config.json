@@ -1,0 +1,16 @@
+{
+  "projectName": "herald-ai",
+  "ai": {
+    "baseUrl": "https://openrouter.ai/api/v1",
+    "model": "${OPEN_ROUTER_AI_MODEL}",
+    "apiKey": "${OPEN_ROUTER_API_KEY}"
+  },
+  "providers": [
+    {
+      "type": "github-release",
+      "token": "${GITHUB_TOKEN}",
+      "owner": "Amirhossein Nouri",
+      "repo": "herald-ai"
+    }
+  ]
+}
