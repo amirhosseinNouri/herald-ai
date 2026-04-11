@@ -29,18 +29,29 @@ function getTags(): GitTag[] {
 	}
 }
 
+function getCommitForRef(ref: string): string {
+	return execSync(`git rev-parse ${ref}^{commit}`, {
+		encoding: "utf-8",
+	}).trim();
+}
+
 function getLatestTag(tags: GitTag[]): GitTag {
 	if (tags.length === 0) {
 		throw new Error("No semver tags found in this repository.");
 	}
 
-	const [tag] = tags;
+	const headCommit = getCommitForRef("HEAD");
 
-	if (!tag) {
-		throw new Error("No tag found in this repository.");
+	for (const tag of tags) {
+		const tagCommit = getCommitForRef(tag.name);
+		if (tagCommit !== headCommit) {
+			return tag;
+		}
 	}
 
-	return tag;
+	throw new Error(
+		"All semver tags point to HEAD. Cannot determine a diff range.",
+	);
 }
 
 function getCommitsBetween(fromTag: string): LocalCommit[] {
