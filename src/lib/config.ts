@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { log } from "@clack/prompts";
+import { interpolateEnvVars } from "@/lib/env";
 import { configSchema, type HeraldConfig } from "@/schema/config";
 
 const CONFIG_FILE_NAMES = [
@@ -82,7 +83,10 @@ async function loadConfig(customPath?: string): Promise<HeraldConfig> {
 
 	try {
 		const raw = await importConfigModule(configPath);
-		return configSchema.parse(raw);
+		const resolved = configPath.endsWith(".json")
+			? interpolateEnvVars(raw)
+			: raw;
+		return configSchema.parse(resolved);
 	} catch (error) {
 		if (error instanceof Error && error.message.includes("validation")) {
 			log.error(`Invalid config: ${error.message}`);

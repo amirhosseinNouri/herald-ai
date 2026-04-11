@@ -33,19 +33,32 @@ export default defineConfig({
 
 ### JSON Config
 
-You can also use a `herald.config.json` file:
+You can also use a `herald.config.json` file. Environment variable references (`$VAR` or `${VAR}`) are automatically interpolated:
 
 ```json
 {
   "ai": {
     "model": "openai/gpt-4o-mini",
-    "apiKey": "your-api-key"
+    "apiKey": "$AI_API_KEY"
   },
   "providers": [
-    { "type": "teams", "webhookUrl": "https://your-webhook-url" }
+    { "type": "teams", "webhookUrl": "${TEAMS_WEBHOOK_URL}" }
   ]
 }
 ```
+
+### Environment Variables
+
+Herald uses [dotenv-flow](https://github.com/kerimdzhanov/dotenv-flow) to automatically load environment variables from `.env` files. The following files are loaded in order (variables defined in earlier files take precedence):
+
+- `.env`
+- `.env.local`
+- `.env.[NODE_ENV]` (e.g. `.env.development`, `.env.production`)
+- `.env.[NODE_ENV].local` (e.g. `.env.development.local`)
+
+This works for both TS/JS configs (via `process.env`) and JSON configs (via `$VAR` / `${VAR}` interpolation). Existing environment variables (e.g. from CI) are never overridden.
+
+> **Tip:** Add `.env*.local` to your `.gitignore` to keep local secrets out of version control.
 
 ### Full Config Example
 

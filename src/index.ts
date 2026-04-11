@@ -1,4 +1,5 @@
 import { intro, log, note, outro, spinner } from "@clack/prompts";
+import { config } from "dotenv-flow";
 import color from "picocolors";
 import { generateChangelog } from "@/lib/changelog";
 import { parseCliArgs } from "@/lib/cli";
@@ -6,6 +7,8 @@ import { loadConfig } from "@/lib/config";
 import { getCommitsBetween, getTags, resolveTargetTag } from "@/lib/git";
 import { announce } from "@/lib/providers";
 import packageJson from "../package.json";
+
+config({ silent: true });
 
 async function main(): Promise<void> {
 	const args = parseCliArgs();
