@@ -25,11 +25,19 @@ const telegramProviderSchema = z.object({
 	chatId: z.string(),
 });
 
+const githubReleaseProviderSchema = z.object({
+	type: z.literal("github-release"),
+	token: z.string(),
+	owner: z.string(),
+	repo: z.string(),
+});
+
 const providerSchema = z.discriminatedUnion("type", [
 	gitlabReleaseProviderSchema,
 	teamsProviderSchema,
 	elementProviderSchema,
 	telegramProviderSchema,
+	githubReleaseProviderSchema,
 ]);
 
 const configSchema = z.object({

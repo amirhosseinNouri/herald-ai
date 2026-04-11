@@ -5,6 +5,7 @@ import type { AnnouncementProvider } from "@/types/provider";
 import { getReleaseManager } from "../git";
 import { getProjectName } from "../project";
 import { ElementProvider } from "./element";
+import { GithubReleaseProvider } from "./github-release";
 import { GitlabReleaseProvider } from "./gitlab-release";
 import { TeamsProvider } from "./teams";
 import { TelegramProvider } from "./telegram";
@@ -19,6 +20,8 @@ function createProvider(config: ProviderConfig): AnnouncementProvider {
 			return new TelegramProvider(config);
 		case "element":
 			return new ElementProvider(config);
+		case "github-release":
+			return new GithubReleaseProvider(config);
 	}
 }
 
