@@ -44,17 +44,30 @@ Common choices:
 - OpenRouter: model like `openai/gpt-4o-mini`, key var `OPEN_ROUTER_API_KEY`
 - Direct OpenAI: base URL `https://api.openai.com/v1`, key var `OPENAI_API_KEY`
 
+The API key **must** be set in `.env` or `.env.local` — never hardcoded in the config file.
+
 ### Step 4: Install and generate
 
-1. Detect package manager from lockfiles (bun.lock -> bun, pnpm-lock.yaml -> pnpm, yarn.lock -> yarn, package-lock.json -> npm)
-2. Run `<pm> add -D herald-ai` (`npm install -D herald-ai` for npm)
+1. **Detect package manager** by checking which lockfile exists in the project root:
+   - `bun.lock` or `bun.lockb` -> `bun`
+   - `pnpm-lock.yaml` -> `pnpm`
+   - `yarn.lock` -> `yarn`
+   - `package-lock.json` -> `npm`
+   - If none found, ask the user which package manager they use
+2. Install using the detected package manager:
+   - bun: `bun add -D herald-ai`
+   - pnpm: `pnpm add -D herald-ai`
+   - yarn: `yarn add -D herald-ai`
+   - npm: `npm install -D herald-ai`
 3. Create config file per user choices
-4. List required env vars for `.env` or `.env.local`
+4. List required env vars — if `.env` or `.env.local` already exists, append missing vars; otherwise create one
 5. Suggest adding scripts to `package.json`
 
 ## Config Templates
 
 ### TypeScript (`herald.config.ts`)
+
+The AI API key is read from `.env` via `process.env` — never hardcode it.
 
 ```typescript
 import { defineConfig } from "herald-ai";
@@ -73,10 +86,12 @@ export default defineConfig({
 
 ### JSON (`herald.config.json`)
 
+In JSON configs, reference the env var using `$VAR` or `${VAR}` syntax — herald resolves these from `.env` at runtime via `dotenv-flow`.
+
 ```json
 {
   "ai": {
-    "model": "${AI_MODEL_VAR}",
+    "model": "<model>",
     "apiKey": "${AI_KEY_VAR}",
     "baseUrl": "<baseUrl>"
   },
@@ -220,9 +235,18 @@ JSON:
 }
 ```
 
-## Environment Variables Summary
+## Environment Variables
 
-After generating config, tell the user exactly which vars to add to `.env` or `.env.local`:
+After generating the config, check if `.env` or `.env.local` already exists in the project. If it does, append only the missing variables. If neither exists, create `.env.local`. Always verify `.gitignore` covers `.env*` files before writing.
+
+Example variables to add:
+```bash
+# AI Provider (required)
+OPEN_ROUTER_API_KEY=your-api-key-here
+
+# Provider: GitHub Release
+GITHUB_TOKEN=your-github-token-here
+```
 
 **Always required:**
 - AI API key (variable name from step 3)
