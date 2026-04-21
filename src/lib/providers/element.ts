@@ -1,3 +1,4 @@
+import { marked } from "marked";
 import type {
 	AnnouncementPayload,
 	AnnouncementProvider,
@@ -31,6 +32,8 @@ class ElementProvider implements AnnouncementProvider {
 			payload.changelog,
 		].join("\n");
 
+		const formattedBody = await marked.parse(body, { async: true });
+
 		const txnId = `herald-${Date.now()}`;
 		const encodedRoomId = encodeURIComponent(this.roomId);
 		const url = `${this.homeserverUrl}/_matrix/client/v3/rooms/${encodedRoomId}/send/m.room.message/${txnId}`;
@@ -47,7 +50,7 @@ class ElementProvider implements AnnouncementProvider {
 					msgtype: "m.text",
 					body,
 					format: "org.matrix.custom.html",
-					formatted_body: body.replace(/\n/g, "<br>"),
+					formatted_body: formattedBody,
 				}),
 			});
 		} catch (error) {
