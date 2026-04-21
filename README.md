@@ -13,6 +13,28 @@ Install Herald as a dev dependency:
 pnpm install -D herald-ai
 ```
 
+### Agent-Assisted Setup
+
+Herald ships with a [`herald-setup`](./skills/herald-setup/SKILL.md) skill that works with any agent supporting the [skills](https://github.com/amirhosseinNouri/skills) spec (Claude Code, Cursor, etc.). It walks you through choosing a config format, selecting providers, and generating the config and env vars for your project.
+
+Add the skill using your package manager of choice:
+
+```bash
+# npm
+npx skills add amirhosseinNouri/herald-ai
+
+# bun
+bunx skills add amirhosseinNouri/herald-ai
+
+# pnpm
+pnpm dlx skills add amirhosseinNouri/herald-ai
+
+# yarn
+yarn dlx skills add amirhosseinNouri/herald-ai
+```
+
+Then ask your agent to "set up herald-ai".
+
 ## Configuration
 
 Create a `herald.config.ts` (or `.js`, `.mjs`, `.json`) file in your project root:
