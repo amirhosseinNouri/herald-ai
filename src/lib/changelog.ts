@@ -1,5 +1,4 @@
 import { AI_SYSTEM_PROMPT } from "@/constants/ai";
-import { getCached, setCached } from "@/lib/cache";
 import type { LocalCommit } from "@/types/git";
 
 interface AiConfig {
@@ -12,15 +11,7 @@ const generateChangelog = async (
 	commits: LocalCommit[],
 	aiConfig: AiConfig,
 	template?: string,
-	cache?: boolean,
 ) => {
-	if (cache) {
-		const cached = getCached(commits);
-		if (cached) {
-			return cached;
-		}
-	}
-
 	const baseUrl = aiConfig.baseUrl || "https://openrouter.ai/api/v1";
 
 	const commitList = JSON.stringify(
@@ -63,10 +54,6 @@ const generateChangelog = async (
 		throw new Error(
 			`AI returned no content: ${JSON.stringify(data).slice(0, 500)}`,
 		);
-	}
-
-	if (cache) {
-		setCached(commits, content as string);
 	}
 
 	return content as string;

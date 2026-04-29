@@ -278,4 +278,3 @@ Suggest adding:
 
 - `projectName`: Override project name (defaults to `package.json` name)
 - `template`: Custom prompt template for AI changelog generation
-- `cache`: Cache generated changelogs (`true`/`false`)

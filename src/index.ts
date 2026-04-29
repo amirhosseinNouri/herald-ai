@@ -54,7 +54,6 @@ async function main(): Promise<void> {
 			commits,
 			config.ai,
 			config.template,
-			config.cache,
 		);
 		s.stop("Changelog generated");
 
