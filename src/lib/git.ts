@@ -56,7 +56,7 @@ function getLatestTag(tags: GitTag[]): GitTag {
 
 function getCommitsBetween(fromTag: string): LocalCommit[] {
 	try {
-		const format = `%H|%s|%B${DELIMITER}`;
+		const format = `%H|%an|%s|%B${DELIMITER}`;
 		const output = execSync(
 			`git log ${fromTag}..HEAD --pretty=format:"${format}"`,
 			{ encoding: "utf-8" },
@@ -73,12 +73,14 @@ function getCommitsBetween(fromTag: string): LocalCommit[] {
 				const trimmed = entry.trim();
 				const firstPipe = trimmed.indexOf("|");
 				const secondPipe = trimmed.indexOf("|", firstPipe + 1);
+				const thirdPipe = trimmed.indexOf("|", secondPipe + 1);
 
 				const hash = trimmed.substring(0, firstPipe);
-				const title = trimmed.substring(firstPipe + 1, secondPipe);
-				const message = trimmed.substring(secondPipe + 1).trim();
+				const author = trimmed.substring(firstPipe + 1, secondPipe);
+				const title = trimmed.substring(secondPipe + 1, thirdPipe);
+				const message = trimmed.substring(thirdPipe + 1).trim();
 
-				return { hash, title, message };
+				return { hash, author, title, message };
 			});
 	} catch {
 		throw new Error(`Failed to get commits between ${fromTag} and HEAD.`);

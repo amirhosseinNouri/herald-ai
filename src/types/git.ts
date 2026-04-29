@@ -5,6 +5,7 @@ export interface GitTag {
 
 export interface LocalCommit {
 	hash: string;
+	author: string;
 	title: string;
 	message: string;
 }

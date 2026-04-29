@@ -14,10 +14,8 @@ const generateChangelog = async (
 	template?: string,
 	cache?: boolean,
 ) => {
-	const commitMessages = commits.map((commit) => commit.message);
-
 	if (cache) {
-		const cached = getCached(commitMessages);
+		const cached = getCached(commits);
 		if (cached) {
 			return cached;
 		}
@@ -25,7 +23,11 @@ const generateChangelog = async (
 
 	const baseUrl = aiConfig.baseUrl || "https://openrouter.ai/api/v1";
 
-	const commitList = commitMessages.map((m) => `- ${m}`).join("\n");
+	const commitList = JSON.stringify(
+		commits.map(({ author, message }) => ({ author, message })),
+		null,
+		2,
+	);
 
 	const response = await fetch(`${baseUrl}/chat/completions`, {
 		method: "POST",
@@ -64,7 +66,7 @@ const generateChangelog = async (
 	}
 
 	if (cache) {
-		setCached(commitMessages, content as string);
+		setCached(commits, content as string);
 	}
 
 	return content as string;

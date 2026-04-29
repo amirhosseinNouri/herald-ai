@@ -11,6 +11,8 @@ const AI_SYSTEM_PROMPT = `
   - Output must be a simple, clean list with one bullet per final item.
   - Do NOT include any title, headers, introductions, or explanations.
   - Each item must summarize the commit clearly, concisely, and professionally.
+  - Append the real author name as plain text in parentheses at the end of each item, for example: "(Amirhossein Nouri)".
+  - If one final item groups commits from multiple authors, include all unique author names in the same parentheses, comma-separated.
   - Remove ALL conventional commit prefixes at the beginning of messages:
       e.g. "feat:", "fix:", "chore:", "refactor:", "style:", "perf:", "revert:", "Feature:", "Feat:", "Fix:", etc.
   - Remove any prefix ending with ":" at the start of the message.
@@ -23,7 +25,7 @@ const AI_SYSTEM_PROMPT = `
 </requirements>
 
 <input>
-  <!-- A list of commit objects, each containing message and author fields -->
+  <!-- A JSON array of commit objects, each containing author and message fields -->
 </input>
 
 <output-format>
