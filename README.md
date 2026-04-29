@@ -122,6 +122,8 @@ export default defineConfig({
   ],
   // Optional: custom AI prompt template for changelog generation
   template: `Generate a changelog from the following commits. Output a clean bullet list.`,
+  // Optional: require an interactive confirmation before publishing outside CI
+  manualConfirm: true,
   // Optional: override project name (defaults to package.json name)
   projectName: "My App",
   // Optional: override release manager (defaults to git config user.name)

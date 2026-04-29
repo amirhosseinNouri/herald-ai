@@ -49,6 +49,7 @@ const configSchema = z.object({
 	}),
 	template: z.string().optional(),
 	cache: z.boolean().optional(),
+	manualConfirm: z.boolean().optional(),
 	projectName: z.string().optional(),
 	debug: z.boolean().optional(),
 });

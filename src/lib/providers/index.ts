@@ -1,7 +1,8 @@
-import { log } from "@clack/prompts";
+import { confirm, isCancel, log } from "@clack/prompts";
 import type { HeraldConfig, ProviderConfig } from "@/schema/config";
 import type { Spinner } from "@/types/clack";
 import type { AnnouncementProvider } from "@/types/provider";
+import { isCI } from "../ci";
 import { getReleaseManager } from "../git";
 import { getProjectName } from "../project";
 import { ElementProvider } from "./element";
@@ -25,6 +26,26 @@ function createProvider(config: ProviderConfig): AnnouncementProvider {
 	}
 }
 
+type ConfirmPublishPrompt = (options: { message: string }) => Promise<unknown>;
+
+async function confirmProviderPublish(
+	config: HeraldConfig,
+	prompt: ConfirmPublishPrompt = confirm,
+): Promise<void> {
+	if (isCI() || !config.manualConfirm) {
+		return;
+	}
+
+	const confirmed = await prompt({
+		message: "Publish this release to the configured providers?",
+	});
+
+	if (isCancel(confirmed) || confirmed !== true) {
+		log.warn("Announcement cancelled.");
+		process.exit(0);
+	}
+}
+
 type AnnounceConfig = {
 	config: HeraldConfig;
 	spinner: Spinner;
@@ -38,6 +59,8 @@ export async function announce({
 	changelog,
 	tag,
 }: AnnounceConfig): Promise<void> {
+	await confirmProviderPublish(config);
+
 	const projectName = getProjectName(config);
 	const releaseManager = getReleaseManager();
 
@@ -68,4 +91,4 @@ export async function announce({
 	}
 }
 
-export { createProvider };
+export { createProvider, confirmProviderPublish };

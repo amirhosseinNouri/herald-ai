@@ -66,7 +66,7 @@ async function main(): Promise<void> {
 		}
 
 		// Announce to all providers
-		announce({ changelog, tag: targetTag, config, spinner: s });
+		await announce({ changelog, tag: targetTag, config, spinner: s });
 
 		outro("Release announced successfully!");
 	} catch (error) {
