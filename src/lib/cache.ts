@@ -13,7 +13,10 @@ function getCacheFile(): string {
 
 function hashCommits(commits: LocalCommit[]): string {
 	const payload = commits.map(({ author, message }) => ({ author, message }));
-	return crypto.createHash("sha256").update(JSON.stringify(payload)).digest("hex");
+	return crypto
+		.createHash("sha256")
+		.update(JSON.stringify(payload))
+		.digest("hex");
 }
 
 function readCache(): CacheStore {

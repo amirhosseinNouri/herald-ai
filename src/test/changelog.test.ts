@@ -10,32 +10,34 @@ describe("lib => generateChangelog", () => {
 	});
 
 	it("sends author names with commit messages to the AI provider", async () => {
-		const fetchMock = mock(async (_input: string | URL | Request, init?: RequestInit) => {
-			const body = JSON.parse(String(init?.body));
-			const userMessage = body.messages[1]?.content as string;
+		const fetchMock = mock(
+			async (_input: string | URL | Request, init?: RequestInit) => {
+				const body = JSON.parse(String(init?.body));
+				const userMessage = body.messages[1]?.content as string;
 
-			expect(userMessage).toContain('"author": "Amirhossein Nouri"');
-			expect(userMessage).toContain('"message": "feat: update herald"');
-			expect(userMessage).toContain('"author": "Ebad Yousefzadeh"');
+				expect(userMessage).toContain('"author": "Amirhossein Nouri"');
+				expect(userMessage).toContain('"message": "feat: update herald"');
+				expect(userMessage).toContain('"author": "Ebad Yousefzadeh"');
 
-			return new Response(
-				JSON.stringify({
-					choices: [
-						{
-							message: {
-								content: "- Updated Herald (Amirhossein Nouri)",
+				return new Response(
+					JSON.stringify({
+						choices: [
+							{
+								message: {
+									content: "- Updated Herald (Amirhossein Nouri)",
+								},
 							},
+						],
+					}),
+					{
+						status: 200,
+						headers: {
+							"Content-Type": "application/json",
 						},
-					],
-				}),
-				{
-					status: 200,
-					headers: {
-						"Content-Type": "application/json",
 					},
-				},
-			);
-		});
+				);
+			},
+		);
 
 		// biome-ignore lint/suspicious/noExplicitAny: fetch is replaced with a test double
 		globalThis.fetch = fetchMock as any;
