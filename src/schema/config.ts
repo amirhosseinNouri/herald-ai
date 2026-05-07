@@ -32,12 +32,18 @@ const githubReleaseProviderSchema = z.object({
 	repo: z.string(),
 });
 
+const slackProviderSchema = z.object({
+	type: z.literal("slack"),
+	webhookUrl: z.url(),
+});
+
 const providerSchema = z.discriminatedUnion("type", [
 	gitlabReleaseProviderSchema,
 	teamsProviderSchema,
 	elementProviderSchema,
 	telegramProviderSchema,
 	githubReleaseProviderSchema,
+	slackProviderSchema,
 ]);
 
 const configSchema = z.object({

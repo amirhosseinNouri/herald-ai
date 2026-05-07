@@ -4,7 +4,7 @@ description: >-
   Set up herald-ai (AI-powered changelog generator and release announcer) in a project.
   Use when the user wants to: (1) add herald-ai to their project, (2) configure herald-ai,
   (3) set up release announcements or changelog generation, (4) integrate herald-ai with
-  Teams, GitHub Releases, GitLab Releases, Telegram, or Element/Matrix.
+  Teams, GitHub Releases, GitLab Releases, Telegram, Element/Matrix, or Slack.
   TRIGGER when: user says "set up herald", "add herald-ai", "configure release announcements",
   "setup changelog generator", or mentions herald-ai setup/init/config.
 ---
@@ -33,6 +33,7 @@ Ask which providers to enable:
 | **GitLab Release** | Create GitLab Release pages |
 | **Telegram** | Send via Telegram bot |
 | **Element** | Post to Matrix/Element rooms |
+| **Slack** | Post via Slack incoming webhook |
 
 User may select one or more.
 
@@ -205,6 +206,19 @@ JSON:
 }
 ```
 
+### Slack
+
+Config fields:
+- `type`: `"slack"`
+- `webhookUrl`: Slack incoming webhook URL
+
+Env var: `SLACK_WEBHOOK_URL`
+
+TS: `{ type: "slack", webhookUrl: process.env.SLACK_WEBHOOK_URL! }`
+JSON: `{ "type": "slack", "webhookUrl": "$SLACK_WEBHOOK_URL" }`
+
+Setup: In Slack, create an app at https://api.slack.com/apps, enable "Incoming Webhooks", add a new webhook to a workspace channel, and copy the URL.
+
 ### Element (Matrix)
 
 Config fields:
@@ -257,6 +271,7 @@ GITHUB_TOKEN=your-github-token-here
 - **GitLab Release**: `GITLAB_TOKEN`
 - **Telegram**: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`
 - **Element**: `ELEMENT_ACCESS_TOKEN`
+- **Slack**: `SLACK_WEBHOOK_URL`
 
 Herald uses `dotenv-flow` so `.env`, `.env.local`, `.env.production`, etc. all work.
 

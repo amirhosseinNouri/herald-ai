@@ -119,6 +119,11 @@ export default defineConfig({
       accessToken: process.env.ELEMENT_ACCESS_TOKEN!,
       roomId: "!roomid:example.com",
     },
+    // Slack
+    {
+      type: "slack",
+      webhookUrl: process.env.SLACK_WEBHOOK_URL!,
+    },
   ],
   // Optional: custom AI prompt template for changelog generation
   template: `Generate a changelog from the following commits. Output a clean bullet list.`,
@@ -206,6 +211,7 @@ herald-ai --config ./config/herald.config.ts
 | `gitlab-release` | GitLab Release page | `baseUrl`, `token`, `projectId` |
 | `telegram` | Telegram bot message | `botToken`, `chatId` |
 | `element` | Element/Matrix room message | `homeserverUrl`, `accessToken`, `roomId` |
+| `slack` | Slack incoming webhook | `webhookUrl` |
 
 ## Requirements
 
