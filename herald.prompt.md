@@ -1,0 +1,1 @@
+- Do not include version bumps in changelog

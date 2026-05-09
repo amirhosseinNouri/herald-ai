@@ -16,6 +16,7 @@
         "@biomejs/biome": "2.3.8",
         "@types/bun": "latest",
         "@types/node": "^25.6.0",
+        "herald-ai": "^2.4.0",
         "tsup": "^8.5.1",
       },
       "peerDependencies": {
@@ -193,6 +194,8 @@
     "fix-dts-default-cjs-exports": ["fix-dts-default-cjs-exports@1.0.1", "", { "dependencies": { "magic-string": "^0.30.17", "mlly": "^1.7.4", "rollup": "^4.34.8" } }, "sha512-pVIECanWFC61Hzl2+oOCtoJ3F17kglZC/6N94eRWycFgBH35hHx0Li604ZIzhseh97mf2p0cv7vVrOZGoqhlEg=="],
 
     "fsevents": ["fsevents@2.3.3", "", { "os": "darwin" }, "sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw=="],
+
+    "herald-ai": ["herald-ai@2.4.0", "", { "dependencies": { "@clack/prompts": "^0.11.0", "dotenv-flow": "^4.1.0", "esbuild": "^0.25.0", "marked": "^18.0.2", "picocolors": "^1.1.1", "zod": "^4.1.8" }, "peerDependencies": { "typescript": "^5" }, "bin": { "herald-ai": "dist/index.cjs" } }, "sha512-I97Fdu8TLO1XASr0bfmTfXnll5zv3JHY1CgOL2SVwuO5GBv8MCAgc9vyK9qCdFWdmUVdv80ivsVKmd0tUdQPrQ=="],
 
     "joycon": ["joycon@3.1.1", "", {}, "sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw=="],
 

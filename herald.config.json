@@ -1,16 +1,23 @@
 {
-  "projectName": "herald-ai",
   "ai": {
-    "baseUrl": "https://openrouter.ai/api/v1",
-    "model": "${OPEN_ROUTER_AI_MODEL}",
-    "apiKey": "${OPEN_ROUTER_API_KEY}"
+    "model": "${OPENAI_MODEL}",
+    "apiKey": "${OPENAI_API_KEY}",
+    "baseUrl": "${OPENAI_BASE_URL}"
   },
   "providers": [
     {
+      "type": "element",
+      "homeserverUrl": "${ELEMENT_HOMESERVER_URL}",
+      "accessToken": "${ELEMENT_ACCESS_TOKEN}",
+      "roomId": "${ELEMENT_ROOM_ID}"
+    },
+     {
       "type": "github-release",
       "token": "${GITHUB_TOKEN}",
       "owner": "amirhosseinNouri",
       "repo": "herald-ai"
     }
-  ]
+  ],
+  "promptFile": "./herald.prompt.md",
+  "manualConfirm": true
 }
