@@ -45,10 +45,3 @@ jobs:
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Announce release with Herald
-        run: node dist/index.cjs
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OPEN_ROUTER_API_KEY: ${{ secrets.OPEN_ROUTER_API_KEY }}
-          OPEN_ROUTER_AI_MODEL: ${{ secrets.OPEN_ROUTER_AI_MODEL }}
