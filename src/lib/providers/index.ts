@@ -49,6 +49,26 @@ async function confirmProviderPublish(
 	}
 }
 
+async function confirmProviderAnnounce(
+	config: HeraldConfig,
+	providerName: string,
+	prompt: ConfirmPublishPrompt = confirm,
+): Promise<boolean> {
+	if (isCI() || !config.confirmBeforePublish) {
+		return true;
+	}
+
+	const confirmed = await prompt({
+		message: `Publish to ${providerName}?`,
+	});
+
+	if (isCancel(confirmed) || confirmed !== true) {
+		return false;
+	}
+
+	return true;
+}
+
 type AnnounceConfig = {
 	config: HeraldConfig;
 	spinner: Spinner;
@@ -71,6 +91,11 @@ export async function announce({
 
 	for (const providerConfig of config.providers) {
 		const provider = createProvider(providerConfig);
+		const proceed = await confirmProviderAnnounce(config, provider.name);
+		if (!proceed) {
+			log.warn(`Skipped ${provider.name}.`);
+			continue;
+		}
 		spinner.start(`Sending to ${provider.name}`);
 		try {
 			await provider.announce({
@@ -94,4 +119,4 @@ export async function announce({
 	}
 }
 
-export { createProvider, confirmProviderPublish };
+export { createProvider, confirmProviderPublish, confirmProviderAnnounce };

@@ -55,6 +55,7 @@ const configSchema = z.object({
 	}),
 	template: z.string().optional(),
 	manualConfirm: z.boolean().optional(),
+	confirmBeforePublish: z.boolean().optional(),
 	projectName: z.string().optional(),
 	debug: z.boolean().optional(),
 });
