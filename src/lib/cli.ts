@@ -6,9 +6,12 @@ export function parseCliArgs() {
 		options: {
 			config: { type: "string", short: "c" },
 			from: { type: "string", short: "f" },
+			prompt: { type: "string", short: "p" },
 			debug: { type: "boolean", default: false },
 		},
 	});
 
 	return values;
 }
+
+export type Args = ReturnType<typeof parseCliArgs>;

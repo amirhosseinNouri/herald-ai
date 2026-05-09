@@ -53,6 +53,7 @@ const configSchema = z.object({
 		apiKey: z.string(),
 		baseUrl: z.url().optional(),
 	}),
+	promptFile: z.string().optional(),
 	manualConfirm: z.boolean().optional(),
 	projectName: z.string().optional(),
 	debug: z.boolean().optional(),

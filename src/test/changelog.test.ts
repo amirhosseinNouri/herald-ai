@@ -65,4 +65,85 @@ describe("lib => generateChangelog", () => {
 		expect(changelog).toBe("- Updated Herald (Amirhossein Nouri)");
 		expect(fetchMock).toHaveBeenCalledTimes(1);
 	});
+
+	it("appends custom instructions inside a <custom-instructions> block in the system prompt", async () => {
+		const customInstructions =
+			"- Skip release commits\n- Group dependency bumps";
+
+		const fetchMock = mock(
+			async (_input: string | URL | Request, init?: RequestInit) => {
+				const body = JSON.parse(String(init?.body));
+				const systemMessage = body.messages[0]?.content as string;
+
+				expect(systemMessage).toContain("<custom-instructions>");
+				expect(systemMessage).toContain(customInstructions);
+				expect(systemMessage).toContain("</custom-instructions>");
+				expect(systemMessage.indexOf("<custom-instructions>")).toBeGreaterThan(
+					0,
+				);
+
+				return new Response(
+					JSON.stringify({
+						choices: [{ message: { content: "- Item" } }],
+					}),
+					{ status: 200, headers: { "Content-Type": "application/json" } },
+				);
+			},
+		);
+
+		// biome-ignore lint/suspicious/noExplicitAny: fetch is replaced with a test double
+		globalThis.fetch = fetchMock as any;
+
+		const commits: LocalCommit[] = [
+			{
+				hash: "1",
+				author: "Amirhossein Nouri",
+				title: "feat: x",
+				message: "feat: x",
+			},
+		];
+
+		await generateChangelog(
+			commits,
+			{ model: "openai/gpt-4o-mini", apiKey: "test-key" },
+			customInstructions,
+		);
+
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+	});
+
+	it("does not include a <custom-instructions> block when no instructions are provided", async () => {
+		const fetchMock = mock(
+			async (_input: string | URL | Request, init?: RequestInit) => {
+				const body = JSON.parse(String(init?.body));
+				const systemMessage = body.messages[0]?.content as string;
+
+				expect(systemMessage).not.toContain("<custom-instructions>");
+
+				return new Response(
+					JSON.stringify({
+						choices: [{ message: { content: "- Item" } }],
+					}),
+					{ status: 200, headers: { "Content-Type": "application/json" } },
+				);
+			},
+		);
+
+		// biome-ignore lint/suspicious/noExplicitAny: fetch is replaced with a test double
+		globalThis.fetch = fetchMock as any;
+
+		await generateChangelog(
+			[
+				{
+					hash: "1",
+					author: "Amirhossein Nouri",
+					title: "feat: x",
+					message: "feat: x",
+				},
+			],
+			{ model: "openai/gpt-4o-mini", apiKey: "test-key" },
+		);
+
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+	});
 });

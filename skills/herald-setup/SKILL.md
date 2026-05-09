@@ -292,3 +292,4 @@ Suggest adding:
 ## Optional Config Fields
 
 - `projectName`: Override project name (defaults to `package.json` name)
+- `promptFile`: Path to a markdown file whose contents are appended to the built-in changelog prompt (additive, not a replacement). Override per-run with `--prompt <path>` / `-p`.
