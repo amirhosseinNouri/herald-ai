@@ -10,6 +10,7 @@ interface AiConfig {
 const generateChangelog = async (
 	commits: LocalCommit[],
 	aiConfig: AiConfig,
+	customInstructions?: string,
 ) => {
 	const baseUrl = aiConfig.baseUrl || "https://openrouter.ai/api/v1";
 
@@ -18,6 +19,10 @@ const generateChangelog = async (
 		null,
 		2,
 	);
+
+	const systemPrompt = customInstructions
+		? `${AI_SYSTEM_PROMPT}\n<custom-instructions>\n${customInstructions}\n</custom-instructions>`
+		: AI_SYSTEM_PROMPT;
 
 	const response = await fetch(`${baseUrl}/chat/completions`, {
 		method: "POST",
@@ -31,7 +36,7 @@ const generateChangelog = async (
 			messages: [
 				{
 					role: "system",
-					content: AI_SYSTEM_PROMPT,
+					content: systemPrompt,
 				},
 				{
 					role: "user",

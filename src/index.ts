@@ -7,6 +7,7 @@ import { loadConfig } from "@/lib/config";
 import { getCommitsBetween, getTags, resolveTargetTag } from "@/lib/git";
 import { announce } from "@/lib/providers";
 import packageJson from "../package.json";
+import { extractCustomPrompt } from "./lib/prompt";
 
 config({ silent: true });
 
@@ -48,9 +49,16 @@ async function main(): Promise<void> {
 
 		s.stop(`Found ${commits.length} commits`);
 
+		// Load custom instructions (CLI flag overrides config)
+		const customInstructions = extractCustomPrompt(args, config);
+
 		// Generate changelog
 		s.start("Generating changelog");
-		const changelog = await generateChangelog(commits, config.ai);
+		const changelog = await generateChangelog(
+			commits,
+			config.ai,
+			customInstructions,
+		);
 		s.stop("Changelog generated");
 
 		note(changelog, "Generated Changelog");

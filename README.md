@@ -125,6 +125,10 @@ export default defineConfig({
       webhookUrl: process.env.SLACK_WEBHOOK_URL!,
     },
   ],
+  // Optional: path to a markdown file with extra instructions appended to the
+  // built-in changelog prompt (e.g. project-specific rules, ignored commit
+  // patterns, grouping preferences). Path is resolved relative to cwd.
+  promptFile: "./herald.prompt.md",
   // Optional: require an interactive confirmation before publishing outside CI
   manualConfirm: true,
   // Optional: override project name (defaults to package.json name)
@@ -169,6 +173,21 @@ herald-ai --debug
 
 # Custom config path
 herald-ai --config ./config/herald.config.ts
+
+# Inject custom instructions from a markdown file
+herald-ai --prompt ./herald.prompt.md
+```
+
+### Custom Prompt File
+
+Use `promptFile` (config) or `--prompt` / `-p` (CLI) to point to a markdown file with extra instructions. Contents are appended to Herald's built-in changelog prompt inside a `<custom-instructions>` block, so the defaults still apply. The CLI flag takes precedence over the config field.
+
+Example `herald.prompt.md`:
+
+```md
+- Skip commits whose messages start with `chore(release)` or look like version bumps (`v1.2.3`).
+- Group all dependency bumps under a single "Dependencies" item.
+- Prefix breaking-change items with `[BREAKING]`.
 ```
 
 ### Add to Scripts
@@ -197,6 +216,7 @@ herald-ai --config ./config/herald.config.ts
 |------|-------------|
 | `--config <path>` | Path to config file (default: auto-discover `herald.config.{ts,js,mjs,json}`) |
 | `--from <tag>` | Specify a tag to diff against HEAD |
+| `--prompt <path>`, `-p` | Path to a markdown file with extra instructions appended to the changelog prompt (overrides `promptFile` in config) |
 | `--debug` | Generate changelog and print it without sending announcements |
 
 > **Note:** Herald automatically detects CI environments (GitHub Actions, GitLab CI) and runs in non-interactive mode, auto-selecting the latest semver tag.
