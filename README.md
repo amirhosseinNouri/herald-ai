@@ -125,8 +125,6 @@ export default defineConfig({
       webhookUrl: process.env.SLACK_WEBHOOK_URL!,
     },
   ],
-  // Optional: custom AI prompt template for changelog generation
-  template: `Generate a changelog from the following commits. Output a clean bullet list.`,
   // Optional: require an interactive confirmation before publishing outside CI
   manualConfirm: true,
   // Optional: override project name (defaults to package.json name)

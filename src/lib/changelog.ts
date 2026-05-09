@@ -10,7 +10,6 @@ interface AiConfig {
 const generateChangelog = async (
 	commits: LocalCommit[],
 	aiConfig: AiConfig,
-	template?: string,
 ) => {
 	const baseUrl = aiConfig.baseUrl || "https://openrouter.ai/api/v1";
 
@@ -32,7 +31,7 @@ const generateChangelog = async (
 			messages: [
 				{
 					role: "system",
-					content: template ?? AI_SYSTEM_PROMPT,
+					content: AI_SYSTEM_PROMPT,
 				},
 				{
 					role: "user",

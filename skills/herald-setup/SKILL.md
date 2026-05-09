@@ -292,4 +292,3 @@ Suggest adding:
 ## Optional Config Fields
 
 - `projectName`: Override project name (defaults to `package.json` name)
-- `template`: Custom prompt template for AI changelog generation

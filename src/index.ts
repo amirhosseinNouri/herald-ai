@@ -50,11 +50,7 @@ async function main(): Promise<void> {
 
 		// Generate changelog
 		s.start("Generating changelog");
-		const changelog = await generateChangelog(
-			commits,
-			config.ai,
-			config.template,
-		);
+		const changelog = await generateChangelog(commits, config.ai);
 		s.stop("Changelog generated");
 
 		note(changelog, "Generated Changelog");
