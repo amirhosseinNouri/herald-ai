@@ -13,6 +13,8 @@ export const extractCustomPrompt = (args: Args, config: HeraldConfig) => {
 			process.exit(1);
 		}
 		const prompt = fs.readFileSync(resolved, "utf-8");
+		const source = args.prompt ? "--prompt flag" : "config.promptFile";
+		log.info(`Loaded custom prompt from ${resolved} (${source})`);
 		return prompt;
 	}
 
