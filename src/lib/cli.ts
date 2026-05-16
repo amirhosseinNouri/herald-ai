@@ -8,6 +8,7 @@ export function parseCliArgs() {
 			from: { type: "string", short: "f" },
 			prompt: { type: "string", short: "p" },
 			debug: { type: "boolean", default: false },
+			interactive: { type: "boolean" },
 		},
 	});
 

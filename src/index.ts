@@ -1,10 +1,12 @@
-import { intro, log, note, outro, spinner } from "@clack/prompts";
+import { cancel, intro, log, note, outro, spinner } from "@clack/prompts";
 import { config } from "dotenv-flow";
 import color from "picocolors";
 import { generateChangelog } from "@/lib/changelog";
+import { isCI } from "@/lib/ci";
 import { parseCliArgs } from "@/lib/cli";
 import { loadConfig } from "@/lib/config";
 import { getCommitsBetween, getTags, resolveTargetTag } from "@/lib/git";
+import { selectChangelogItems } from "@/lib/interactive";
 import { announce } from "@/lib/providers";
 import packageJson from "../package.json";
 import { extractCustomPrompt } from "./lib/prompt";
@@ -54,7 +56,7 @@ async function main(): Promise<void> {
 
 		// Generate changelog
 		s.start("Generating changelog");
-		const changelog = await generateChangelog(
+		let changelog = await generateChangelog(
 			commits,
 			config.ai,
 			customInstructions,
@@ -66,6 +68,23 @@ async function main(): Promise<void> {
 		if (debug) {
 			outro("Debug mode: no announcements sent.");
 			return;
+		}
+
+		// Interactive changelog editor
+		const interactive =
+			(args.interactive ?? config.interactive ?? true) && !isCI();
+		if (interactive) {
+			const result = await selectChangelogItems(changelog);
+			if (typeof result === "symbol") {
+				cancel("Cancelled.");
+				process.exit(0);
+			}
+			if (!result.trim()) {
+				log.warn("No changelog items selected. Nothing to announce.");
+				process.exit(0);
+			}
+			changelog = result;
+			note(changelog, "Final Changelog");
 		}
 
 		// Announce to all providers

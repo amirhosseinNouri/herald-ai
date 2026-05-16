@@ -64,6 +64,7 @@ const configSchema = z.object({
 	confirmBeforePublish: z.boolean().optional(),
 	projectName: z.string().optional(),
 	debug: z.boolean().optional(),
+	interactive: z.boolean().optional(),
 });
 
 export type HeraldConfig = z.infer<typeof configSchema>;
