@@ -13,12 +13,6 @@ export default defineConfig({
 			accessToken: process.env.ELEMENT_ACCESS_TOKEN!,
 			roomId: process.env.ELEMENT_ROOM_ID!,
 		},
-		{
-			type: "github-release",
-			token: process.env.GITHUB_TOKEN!,
-			owner: "amirhosseinNouri",
-			repo: "herald-ai",
-		},
 		{ type: 'mattermost', webhookUrl: process.env.MATTERMOST_WEBHOOK_URL! }
 	],
 	promptFile: "./herald.prompt.md",
