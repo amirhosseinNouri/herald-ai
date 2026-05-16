@@ -8,6 +8,7 @@ import { getProjectName } from "../project";
 import { ElementProvider } from "./element";
 import { GithubReleaseProvider } from "./github-release";
 import { GitlabReleaseProvider } from "./gitlab-release";
+import { MattermostProvider } from "./mattermost";
 import { SlackProvider } from "./slack";
 import { TeamsProvider } from "./teams";
 import { TelegramProvider } from "./telegram";
@@ -26,6 +27,8 @@ function createProvider(config: ProviderConfig): AnnouncementProvider {
 			return new GithubReleaseProvider(config);
 		case "slack":
 			return new SlackProvider(config);
+		case "mattermost":
+			return new MattermostProvider(config);
 	}
 }
 

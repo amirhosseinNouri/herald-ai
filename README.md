@@ -124,6 +124,11 @@ export default defineConfig({
       type: "slack",
       webhookUrl: process.env.SLACK_WEBHOOK_URL!,
     },
+    // Mattermost
+    {
+      type: "mattermost",
+      webhookUrl: process.env.MATTERMOST_WEBHOOK_URL!,
+    },
   ],
   // Optional: path to a markdown file with extra instructions appended to the
   // built-in changelog prompt (e.g. project-specific rules, ignored commit
@@ -230,6 +235,7 @@ Example `herald.prompt.md`:
 | `telegram` | Telegram bot message | `botToken`, `chatId` |
 | `element` | Element/Matrix room message | `homeserverUrl`, `accessToken`, `roomId` |
 | `slack` | Slack incoming webhook | `webhookUrl` |
+| `mattermost` | Mattermost incoming webhook | `webhookUrl` |
 
 ## Requirements
 

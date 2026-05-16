@@ -37,6 +37,11 @@ const slackProviderSchema = z.object({
 	webhookUrl: z.url(),
 });
 
+const mattermostProviderSchema = z.object({
+	type: z.literal("mattermost"),
+	webhookUrl: z.url(),
+});
+
 const providerSchema = z.discriminatedUnion("type", [
 	gitlabReleaseProviderSchema,
 	teamsProviderSchema,
@@ -44,6 +49,7 @@ const providerSchema = z.discriminatedUnion("type", [
 	telegramProviderSchema,
 	githubReleaseProviderSchema,
 	slackProviderSchema,
+	mattermostProviderSchema,
 ]);
 
 const configSchema = z.object({
