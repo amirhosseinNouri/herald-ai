@@ -5,8 +5,9 @@ import { generateChangelog } from "@/lib/changelog";
 import { isCI } from "@/lib/ci";
 import { parseCliArgs } from "@/lib/cli";
 import { loadConfig } from "@/lib/config";
-import { getCommitsBetween, getTags, resolveTargetTag } from "@/lib/git";
+import { getCommitsBetween, getTags, resolveFromTag } from "@/lib/git";
 import { selectChangelogItems } from "@/lib/interactive";
+import { extractPackageVersion } from "@/lib/package";
 import { announce } from "@/lib/providers";
 import packageJson from "../package.json";
 import { extractCustomPrompt } from "./lib/prompt";
@@ -35,14 +36,18 @@ async function main(): Promise<void> {
 			process.exit(1);
 		}
 
-		// Resolve target tag
-		const targetTag = await resolveTargetTag(tags, {
+		// Release tag from package.json version
+		const releaseTag = extractPackageVersion();
+
+		// Resolve previous tag for diff
+		const fromTag = await resolveFromTag(tags, {
 			from: args.from,
+			releaseTag,
 		});
 
 		// Get commits
-		s.start(`Fetching commits between ${targetTag} and HEAD`);
-		const commits = getCommitsBetween(targetTag);
+		s.start(`Fetching commits between ${fromTag} and HEAD (${releaseTag})`);
+		const commits = getCommitsBetween(fromTag);
 
 		if (commits.length === 0) {
 			log.warn("No commits found between the selected tag and HEAD.");
@@ -88,7 +93,7 @@ async function main(): Promise<void> {
 		}
 
 		// Announce to all providers
-		await announce({ changelog, tag: targetTag, config, spinner: s });
+		await announce({ changelog, tag: releaseTag, config, spinner: s });
 
 		outro("Release announced successfully!");
 	} catch (error) {

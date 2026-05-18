@@ -98,12 +98,12 @@ function getReleaseManager(): string {
 	}
 }
 
-async function resolveTargetTag(
+async function resolveFromTag(
 	tags: GitTag[],
-	options: { from?: string },
+	options: { from?: string; releaseTag: string },
 ): Promise<string> {
 	if (options.from) {
-		log.info(`Using tag: ${options.from}`);
+		log.info(`Using previous tag: ${options.from}`);
 		return options.from;
 	}
 
@@ -111,13 +111,23 @@ async function resolveTargetTag(
 
 	if (ci) {
 		const latest = getLatestTag(tags);
-		log.info(`CI mode: using latest tag ${latest.name} (${latest.date})`);
+		log.info(`CI mode: using previous tag ${latest.name} (${latest.date})`);
 		return latest.name;
 	}
 
+	const headCommit = getCommitForRef("HEAD");
+	const selectable = tags.filter(
+		(t) =>
+			t.name !== options.releaseTag && getCommitForRef(t.name) !== headCommit,
+	);
+
+	if (selectable.length === 0) {
+		throw new Error("No previous tag available to diff against HEAD.");
+	}
+
 	const selected = await select({
-		message: "Select a tag to diff against HEAD",
-		options: tags.map((t) => ({
+		message: "Select previous tag to diff against HEAD",
+		options: selectable.map((t) => ({
 			value: t.name,
 			label: t.name,
 			hint: t.date,
@@ -137,5 +147,5 @@ export {
 	getLatestTag,
 	getCommitsBetween,
 	getReleaseManager,
-	resolveTargetTag,
+	resolveFromTag,
 };
